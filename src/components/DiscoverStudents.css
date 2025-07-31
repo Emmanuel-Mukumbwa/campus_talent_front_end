@@ -1,0 +1,76 @@
+/* File: src/components/DiscoverStudents.css */
+
+/* Overall section */
+.discover-students {
+  max-width: 1200px;
+}
+
+/* Section header */
+.discover-students h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+/* StudentSection (wraps a title + grid of cards) */
+.student-section {
+  margin-bottom: 2rem;
+}
+.student-section .section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Assuming StudentSection renders a Row of Cards: */
+.student-cards .card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.student-cards .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+.student-cards .card-body {
+  flex: 1;
+  padding: 1.25rem;
+}
+
+/* Student avatar */
+.student-cards .card-img-top {
+  width: 100%;
+  object-fit: cover;
+  height: 180px;
+}
+
+/* Student name & info */
+.student-cards .card-title {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+.student-cards .card-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+/* Action buttons row */
+.student-cards .btn {
+  margin-top: auto;
+}
+
+/* Load More button spacing */
+.load-more-btn {
+  margin-top: 1rem;
+}
+
+/* SearchFilters adjustments */
+.search-filters {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+}

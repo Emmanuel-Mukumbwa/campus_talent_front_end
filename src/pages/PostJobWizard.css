@@ -1,0 +1,29 @@
+.post-job-wizard { padding: 2rem; }
+.stepper { display: flex; list-style: none; padding: 0; margin-bottom: 1.5rem; }
+.step { cursor: pointer; flex: 1; text-align: center; position: relative; }
+.step-number { display: inline-block; width: 2rem; height: 2rem; line-height: 2rem; border-radius: 50%; background: #ccc; margin-bottom: 0.5rem; }
+.step.completed .step-number { background: #2a6f2a; }
+.step.current .step-number { background: #2a6f2a; font-weight: bold; }
+.form-step { background: #fff; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+.preview-pane { background: #f9f9f9; padding: 1rem; border-radius: 0.5rem; }
+.wizard-body { gap: 1.5rem; }
+@media (max-width: 991px) {
+  .wizard-body { display: block; }
+  .preview-container { margin-top: 1.5rem; }
+}
+/* exit-modal, modal-content styling… */
+
+.portfolio-sidebar {
+  list-style: none;
+  padding: 0;
+}
+
+.portfolio-sidebar .list-group-item {
+  cursor: pointer;
+}
+
+.portfolio-sidebar .list-group-item.active {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+

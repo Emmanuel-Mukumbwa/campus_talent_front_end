@@ -1,0 +1,53 @@
+/* src/pages/GetStarted.css */
+
+/* Container for the whole timeline */
+.timeline {
+  position: relative;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  list-style: none;
+}
+
+/* The vertical line */
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0.6rem;
+  width: 2px;
+  height: 100%;
+  background-color: #198754; /* Bootstrap success */
+}
+
+/* Each timeline item */
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+/* The circular icon wrapper */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  top: 0.25rem;
+  left: -0.25rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: #198754;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Space between icon and content */
+.timeline-item .icon {
+  position: absolute;
+  top: -0.15rem;
+  left: -0.65rem;
+  color: #fff;
+  background-color: #198754;
+  padding: 0.15rem;
+  border-radius: 50%;
+  font-size: 1rem;
+  z-index: 2;
+}

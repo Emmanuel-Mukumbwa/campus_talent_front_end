@@ -1,0 +1,110 @@
+/* File: src/components/navbar.css */
+
+/* Glassy semi-transparent navbar */
+/* Glassy semi-transparent navbar (enhanced) */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.3);             /* more see-through */
+  backdrop-filter: blur(20px) saturate(180%);        /* stronger blur + color pop */
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);        /* ghostly border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);        /* gentle depth */
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+.glass-nav:hover {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Logo */
+.logo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #2a6f2a !important;
+  letter-spacing: 1px;
+}
+
+/* Search */
+.header-search {
+  flex: 1;
+  max-width: 400px;
+}
+.search-input {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-right: none;
+}
+.search-btn {
+  background: #198754;
+  border: none;
+  color: #fff;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  transition: background 0.2s ease;
+}
+.search-btn:hover {
+  background: #157347;
+}
+
+/* Nav link & icon */
+.nav-link {
+  color: rgba(0, 0, 0, 0.7) !important;
+  position: relative;
+  transition: color 0.2s ease;
+}
+.nav-icon {
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+}
+.nav-label {
+  font-size: 0.9rem;
+}
+.nav-link:hover .nav-label,
+.nav-link:hover .nav-icon {
+  color: #198754 !important;
+}
+.active-link .nav-icon,
+.active-link .nav-label {
+  color: #198754 !important;
+  font-weight: 500;
+}
+
+/* Bell & notif badge */
+.notif-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.65rem;
+}
+.bell-trigger {
+  cursor: pointer;
+}
+
+/* Notification dropdown */
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.5rem;
+  width: 250px;
+  background: #fff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  z-index: 1100;
+}
+.dropdown-header {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #343a40;
+}
+.notif-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.notif-item:hover {
+  background-color: rgba(25, 135, 84, 0.1);
+}

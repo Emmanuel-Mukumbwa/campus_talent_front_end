@@ -1,0 +1,72 @@
+/* src/pages/Conversation.css */
+
+.conversation-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+.chat-window {
+  height: 60vh;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #f0f2f5;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Base bubble styling */
+.chat-bubble {
+  position: relative;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  max-width: 75%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 0.5rem;
+}
+
+/* Other person’s messages (left) */
+.chat-bubble.them {
+  background: #fff;
+  color: #333;
+  border-top-left-radius: 0;
+}
+
+/* Your messages (right) */
+.chat-bubble.me {
+  background: #198754;
+  color: #fff;
+  border-top-right-radius: 0;
+}
+
+/* Timestamp & read receipt */
+.chat-meta {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  opacity: 0.75;
+}
+
+/* two‑tick indicator */
+.ticks {
+  font-size: 1.1rem;
+  background: white;
+  padding: 0 0.2rem;
+  border-radius: 0.25rem;
+  line-height: 1;
+  box-shadow: 0 0 2px rgba(0,0,0,0.2);
+}
+
+.ticks.sent {
+  color: #6c757d; /* gray */
+}
+
+.ticks.read {
+  color: #0d6efd; /* blue */
+}
+
+/* Removed sticky; now just standard bottom padding */
+.send-area {
+  background: white;
+  padding-top: 0.5rem;
+}

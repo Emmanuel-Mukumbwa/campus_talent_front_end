@@ -1,0 +1,61 @@
+/* File: src/pages/Register.css */
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fa;
+  padding: 2rem;
+}
+
+.register-card {
+  max-width: 900px;
+  width: 90%;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.hero-image2 {
+  height: 90%;
+  object-fit: cover;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  width: 100%;
+  margin-top: 2rem; 
+  border-radius: 2rem 6rem 2rem 6rem;
+}
+
+@media (max-width: 767px) {
+  .hero-image2 {
+    display: none;
+  }
+}
+
+.register-form {
+  padding: 2.5rem;
+}
+
+.register-form h4 {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.register-form form .form-control,
+.register-form form .form-select {
+  margin-bottom: 1rem;
+  border-radius: 6px;
+}
+
+.register-form form button {
+  margin-top: 1rem;
+  border-radius: 6px;
+}
+
+.register-form p {
+  margin-top: 1.5rem;
+  text-align: center; 
+}

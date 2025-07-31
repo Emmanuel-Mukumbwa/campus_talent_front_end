@@ -1,0 +1,135 @@
+/* HEADER BACKGROUND & OVERLAY */
+.portfolio-header {
+  position: relative;
+  background: linear-gradient(135deg, #e9f7ee 0%, #ffffff 100%);
+  border-radius: .5rem;
+  padding: 2rem 1rem 1rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+.header-avatar {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  border: 4px solid white;
+  border-radius: 50%;
+}
+.header-content {
+  margin-left: 6rem;
+}
+.header-mini { /* mobile fallback */
+  display: flex !important;
+  margin-left: 4rem;
+  align-items: center;
+}
+@media (min-width: 576px) {
+  .header-mini { display: none !important; }
+}
+
+/* STAT CARDS */
+.stat-cards {
+  margin-bottom: 2rem;
+}
+.stat-card {
+  text-align: center;
+  padding: 1rem;
+  border-radius: .5rem;
+  background-color: #f8f9fa;
+  transition: transform .2s;
+}
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+.stat-icon {
+  font-size: 1.5rem;
+  margin-bottom: .5rem;
+}
+
+/* PROGRESS BARS */
+.progress {
+  height: .5rem;
+  border-radius: .25rem;
+  overflow: hidden;
+}
+.progress-bar {
+  transition: width .6s ease;
+}
+
+/* PROJECT OVERLAY */
+.portfolio-card {
+  overflow: hidden;
+}
+.project-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.portfolio-card:hover .project-overlay {
+  opacity: 1;
+}
+.project-overlay .btn {
+  margin: 0 .25rem;
+  color: white;
+  border-color: white;
+}
+
+/* ABOUT & OTHER STATS CARDS */
+.profile-card {
+  margin-bottom: 1.5rem;
+  border-radius: .5rem;
+  overflow: hidden;
+}
+.profile-card .card-header {
+  background-color: #f1f1f1;
+  font-weight: 500;
+}
+.profile-card .list-group-item {
+  border: none;
+  padding: .5rem 1rem;
+}
+
+/* SKILLS CARDS GRID */
+.skills-cards .skill-card {
+  text-align: center;
+  padding: 1rem 0;
+  border-radius: .5rem;
+  transition: transform .2s, box-shadow .2s;
+}
+.skills-cards .skill-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.skills-cards .skill-card .stat-icon {
+  font-size: 1.75rem;
+  margin-bottom: .5rem;
+}
+
+.stat-card .progress {
+  height: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+.skill-card .progress {
+  height: 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Stronger overrides for the PortfolioView tabs */
+.portfolio-container #portfolio-tabs.nav-pills .nav-link {
+  color: var(--bs-success) !important;
+  background-color: transparent !important;
+}
+.portfolio-container #portfolio-tabs.nav-pills .nav-link:hover {
+  background-color: rgba(var(--bs-success-rgb), 0.1) !important;
+}
+.portfolio-container #portfolio-tabs.nav-pills .nav-link.active {
+  background-color: var(--bs-success) !important;
+  color: #fff !important;
+  border-color: var(--bs-success) !important;
+}

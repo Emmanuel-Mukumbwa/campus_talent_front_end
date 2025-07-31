@@ -1,5 +1,13 @@
+/* App.css */
 .App {
-  text-align: center;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
 }
 
 .App-logo {
@@ -36,3 +44,171 @@
     transform: rotate(360deg);
   }
 }
+
+/* App.css */
+
+/* Default nav-link color & hover */
+.navbar .nav-link {
+  color: rgba(0, 0, 0, 0.55);
+  transition: color 0.2s;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: #198754 !important;
+}
+
+/* Active-link styling (LinkedIn-style underline) */
+.navbar .active-link {
+  color: #198754 !important;
+  font-weight: 500;
+  position: relative;
+}
+.navbar .active-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #198754;
+  border-radius: 1px;
+}
+
+/* Optional: badge vertical align */
+.navbar .badge {
+  font-size: 0.65em;
+  vertical-align: baseline;
+}
+
+/* --- Global Card Styles (Upwork-inspired) --- */
+
+/* Base card */
+.card {
+  border: 1px solid #e1e4e8;      /* thin, light gray border */
+  border-radius: 8px;             /* slight rounding */
+  background-color: #fff;         /* pure white background */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+/* Lift on hover */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header section */
+.card-header {
+  background-color: #f9fafb;      /* subtle light tint */
+  border-bottom: 1px solid #e1e4e8;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #24292e;
+}
+
+/* Body section padding */
+.card-body {
+  padding: 1rem 1.25rem;
+}
+
+/* Pills for small stats */
+.card-pill {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #0366d6;
+  background-color: #e7f5ff;
+  border-radius: 16px;
+}
+
+/* Accent for “Verified” badge */
+.card-badge-verified {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.7rem;
+  color: #fff;
+  background-color: #28a745;
+  border-radius: 12px;
+  margin-left: 0.5rem;
+}
+
+/* Buttons inside cards */
+.card .btn {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+}
+
+/* Card Section Titles */
+.card-section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #198754;
+  margin-bottom: 0.25rem;
+}
+
+/* Pills (light-green background, dark green text) */
+.card-pill {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  margin: 0 0.25rem 0.25rem 0;
+  font-size: 0.85rem;
+  background-color: #e6f4ea;  /* very light green */
+  color: #198754;
+  border-radius: 0.25rem;
+}
+
+/* Flat card treatment for entire app */
+.card {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Make all .btn-outline-success on hover fill with green */
+.btn-outline-success:hover,
+.btn-outline-success:focus {
+  background-color: #198754 !important;
+  color: #fff !important;
+  border-color: #198754 !important;
+}
+
+/* Tiny consistent pill styling for badges across cards */
+.card-pill {
+  display: inline-block;
+  background: #e6f4ea;
+  color: #198754;
+  border-radius: 12px;
+  padding: 0.25em 0.75em;
+  font-size: 0.85rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Override Bootstrap link buttons in rec-cards */
+.rec-card .card-body p {
+  margin: 0;
+  font-weight: 500;
+  color: #198754;
+}
+
+/* File: src/App.css or a global CSS file */
+.card-verified-by {
+  background: #e6f4ea;
+  color: #2a6f2a;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 500;
+}
+

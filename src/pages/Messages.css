@@ -1,0 +1,47 @@
+/* src/pages/Messages.css */
+
+.container-myconvos {
+  max-width: 600px;
+  margin: auto;
+}
+
+h3.convos-header {
+  font-weight: 500;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}
+
+.convo-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e9ecef;
+  transition: background 0.15s;
+}
+.convo-item:hover {
+  background-color: #f8f9fa;
+}
+
+.convo-avatar {
+  flex-shrink: 0;
+}
+
+.convo-content {
+  flex-grow: 1;
+  overflow: hidden;
+}
+.convo-content .other-name {
+  font-weight: 600;
+}
+.convo-content .last-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.convo-meta {
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 0.8rem;
+  color: #6c757d;
+}

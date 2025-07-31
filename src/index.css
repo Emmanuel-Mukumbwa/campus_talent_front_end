@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.gradient-divider {
+  border: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #28a745, transparent);
+  margin: 2rem 0;
+}
+
+/* 8. Cards—subtle shadow & rounded corners */
+.card {
+  border-radius: 0.5rem;
+  border: 1px solid var(--light-border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
+  background-color: #fff;
+}
+
+/* 10. Form controls—consistent focus outline */
+.form-control:focus {
+  border-color: var(--brand-green);
+  box-shadow: 0 0 0 0.2rem rgba(40,167,69,0.25);
+}
+
+/* 11. Tables—zebra striping */
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(40,167,69,0.05);
+}

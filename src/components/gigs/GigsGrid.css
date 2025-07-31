@@ -1,0 +1,38 @@
+/* File: src/components/GigsGrid.css */
+
+/* Card hover lift */
+.gig-card {
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gig-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Skill badges */
+.skill-badge {
+  border: 1px solid #28a745;
+  background-color: transparent;
+  color: #28a745;
+}
+
+/* Ensure buttons are consistent size and spacing */
+.gig-card .btn {
+  flex: 1 1 auto;
+}
+
+/* Small adjustments for typography */
+.gig-card .card-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.gig-card .card-subtitle {
+  font-size: 0.875rem;
+}
+
+.gig-card p.small {
+  font-size: 0.875rem;
+}

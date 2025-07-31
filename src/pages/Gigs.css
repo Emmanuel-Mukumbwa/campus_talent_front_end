@@ -1,0 +1,94 @@
+/* File: src/pages/Gigs.css */
+
+/* 🔧 CONTAINER TWEAKS */
+.my-gigs-page {
+  padding-top: 2rem;
+}
+
+@media (min-width: 992px) {
+  .my-gigs-page {
+    padding-top: 3rem;
+  }
+}
+
+/* ✅ HEADER STYLING */
+.network-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  gap: 0.75rem;
+}
+
+@media (min-width: 992px) {
+  .network-header {
+    align-items: flex-start;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.network-header .display-6 {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .network-header .display-6 {
+    font-size: 1.6rem;
+  }
+}
+
+.network-header .display-6 i {
+  vertical-align: middle;
+}
+
+.network-header .lead {
+  font-size: 1.05rem;
+  color: #6c757d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+  .network-header .lead {
+    margin: 0;
+  }
+}
+
+/* 🎯 STATS UNDER TITLE */
+.network-header .text-muted.small {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.network-header .text-muted.small span {
+  display: inline-block;
+  margin-right: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .network-header .text-muted.small span {
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+}
+
+/* 🌟 STATUS CARD */
+.status-card {
+  border: none;
+}
+
+@media (max-width: 992px) {
+  .status-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}

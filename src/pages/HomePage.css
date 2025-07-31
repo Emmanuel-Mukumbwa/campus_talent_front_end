@@ -1,0 +1,160 @@
+/* Hero Section: two-column text + image with gentle parallax zoom */
+.homepage{
+margin-top: -1rem;
+}
+.hero-section {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr; /* Slightly favor image */
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 5%;
+  background-color: #fff;
+}
+
+.hero-text {
+  max-width: 520px;
+  color: #343a40;
+  text-align: left;
+  padding-left: 0.5rem;
+  z-index: 2;
+}
+
+.hero-text h1 {
+  font-size: 2.8rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+  color: #6c757d;
+}
+
+.hero-image {
+  height: 420px;
+  margin-left: -2rem; /* Shift slightly left toward text */
+  margin-right: 2rem;  /* Add white space on right */
+  border-radius: 2rem 6rem 2rem 6rem;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  /*animation: heroZoom 20s infinite alternate ease-in-out;*/
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+}
+
+.hero-text h5 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #f8f9fa;
+}
+
+
+@keyframes heroZoom {
+  from {
+    transform: scale(1) translateY(0);
+  }
+  to {
+    transform: scale(1.08) translateY(-8px);
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 767px) {
+  .hero-section {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+  }
+  .hero-image {
+    order: -1;
+    height: 250px;
+    width: 100%;
+    margin: 0 0 1.5rem 0;
+  }
+  .hero-text {
+    text-align: center;
+    padding-left: 0;
+  }
+}
+
+/* Shared Card Styles */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Sections */
+.student-section,
+.recruiter-section {
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+}
+
+/* Other existing styles remain unchanged below... */
+
+/* Buttons */
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+/* Logo and Navbar */
+.logo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: #2a6f2a;
+  letter-spacing: 1px;
+}
+
+.navbar-nav .nav-link {
+  margin: 0 0.5rem;
+}
+
+.header-search {
+  width: 50%;
+}
+
+@media (max-width: 767px) {
+  .header-search {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* Additional section tweaks */
+.cta-buttons .btn {
+  min-width: 220px;
+  margin-bottom: 1rem;
+}
+
+.skill-trends .badge {
+  font-size: 0.9rem;
+  margin: 3px;
+}
+.progress-tracker {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.skills-section h3,
+.students-section h3 {
+  margin-bottom: 1rem;
+}
+
+.students-section h5,
+.skills-section h3 {
+  color: #2a6f2a;
+}
+
+.students-section .badge-group span,
+.students-section .badge-group {
+  margin-right: 0.5rem;
+}

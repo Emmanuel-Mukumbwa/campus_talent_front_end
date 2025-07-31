@@ -1,0 +1,69 @@
+/* MyProfile.css */
+
+.profile-container {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-header {
+  margin-bottom: 2rem;
+}
+
+.profile-header h2 {
+  color: #2c5f2d;
+}
+
+.profile-header .text-muted {
+  color: #556b2f;
+}
+
+.profile-header .btn-outline-primary {
+  border-color: #2f8f4e;
+  color: #2f8f4e;
+}
+
+.profile-header .btn-outline-primary:hover {
+  background-color: #2f8f4e;
+  color: #fff;
+}
+
+.profile-section + .profile-section {
+  margin-top: 2rem;
+}
+
+.profile-section h5,
+.card-header {
+  background-color: #2f8f4e !important;
+  color: #fff !important;
+  padding: 0.75rem 1.25rem;
+}
+
+.card-header {
+  border-bottom: none;
+}
+
+.card-body {
+  background: #f9fdf7;
+}
+
+.btn-success {
+  background-color: #2f8f4e;
+  border-color: #2f8f4e;
+}
+
+.btn-success:hover {
+  background-color: #256f3d;
+  border-color: #256f3d;
+}
+
+.badge-secondary {
+  background-color: #a3c293;
+  color: #2c5f2d;
+}
+
+.table th {
+  color: #2f8f4e;
+  width: 30%;
+}
