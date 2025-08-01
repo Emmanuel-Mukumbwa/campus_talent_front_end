@@ -1,3 +1,182 @@
+├── .gitignore
+├── README.md
+├── package-lock.json
+├── package.json
+├── public
+    ├── index.html
+    ├── logo192.png
+    ├── logo512.png
+    ├── manifest.json
+    └── robots.txt
+└── src
+    ├── App.css
+    ├── App.js
+    ├── App.test.js
+    ├── api
+        └── mockAPI.js
+    ├── assets
+        └── images
+        │   ├── IMG-20250413-WA0008.jpg
+        │   ├── IMG-20250510-WA0009.jpg
+        │   ├── application.jpg
+        │   ├── background.jpg
+        │   ├── background1.jpg
+        │   ├── joblisting1.jpg
+        │   ├── joblisting2.jpg
+        │   ├── join-hero.jpg
+        │   ├── join-hero1.jpg
+        │   ├── skilladdition.jpg
+        │   ├── skilladdition1.jpg
+        │   └── studentdash.jpg
+    ├── components
+        ├── AdminNavbar.css
+        ├── AdminNavbar.js
+        ├── AnalyticsPanel.js
+        ├── DiscoverStudents.css
+        ├── DiscoverStudents.js
+        ├── FiltersSidebar.js
+        ├── FindJobsBySkill.css
+        ├── FindJobsBySkill.js
+        ├── Footer.js
+        ├── GlobalNavbar.js
+        ├── Modal.css
+        ├── Navbar.js
+        ├── NotificationsPanel.js
+        ├── ProtectedRoute.js
+        ├── Recommendations.js
+        ├── Sidebar.js
+        ├── applications
+        │   ├── ApplicationsTable.js
+        │   ├── InlinePreview.js
+        │   ├── StatusTabs.js
+        │   └── TaskChecklist.js
+        ├── apply
+        │   ├── ApplicationStep.js
+        │   └── PortfolioStep.js
+        ├── connections
+        │   ├── ConnectionCard.js
+        │   ├── ConnectionsGrid.js
+        │   ├── ConnectionsSection.js
+        │   ├── index.js
+        │   └── mockSuggestedConnections.js
+        ├── creategig
+        │   ├── GigEscrowStep3.js
+        │   ├── GigFormStep1.js
+        │   ├── GigPreviewStep5.js
+        │   └── GigRequirementsStep4.js
+        ├── discover
+        │   ├── LoadMoreButton.js
+        │   ├── SearchFilters.js
+        │   ├── StudentCard.js
+        │   └── StudentSection.js
+        ├── gigs
+        │   ├── AnalyticsPanel.js
+        │   ├── FiltersSidebar.js
+        │   ├── GigsGrid.css
+        │   ├── GigsGrid.js
+        │   └── Recommendations.js
+        ├── myprofile
+        │   ├── ProfileForm.js
+        │   └── ProfileHeader.js
+        ├── navbar.css
+        ├── portfoliobuilder
+        │   ├── AboutStep.js
+        │   ├── MediaUpload.js
+        │   ├── PreviewStep.js
+        │   ├── ProficiencyStep.js
+        │   ├── ProjectForm.js
+        │   ├── ProjectStep.js
+        │   ├── SkillSelectStep.js
+        │   ├── WizardNavButtons.js
+        │   └── templates.js
+        └── verification
+        │   ├── BasicVerification.js
+        │   └── BusinessVerification.js
+    ├── constants
+        └── programs.js
+    ├── data
+        ├── ApplyGigWizard.js
+        ├── CreateGigWizard.js
+        ├── DiscoverStudents.js
+        ├── EditGigWizard.js
+        ├── PortfolioBuilder.js
+        ├── PortfolioView.js
+        ├── ProjectStep.js
+        ├── RecruiterApplications.js
+        ├── gigs.js
+        ├── index.js
+        └── networkData.js
+    ├── index.css
+    ├── index.js
+    ├── logo.svg
+    ├── pages
+        ├── ApplyGigWizard.js
+        ├── Conversation.css
+        ├── Conversation.js
+        ├── CreateGigWizard.js
+        ├── Disclaimer.js
+        ├── EditGigWizard.js
+        ├── EndorseWizard.css
+        ├── EndorseWizard.js
+        ├── EscrowCheck.js
+        ├── EscrowDetail.js
+        ├── FeesPage.js
+        ├── GetStarted.css
+        ├── GetStarted.js
+        ├── GigDetail.js
+        ├── Gigs.css
+        ├── Gigs.js
+        ├── HomePage.css
+        ├── HomePage.js
+        ├── LoginPage.js
+        ├── Messages.css
+        ├── Messages.js
+        ├── MyNetwork.css
+        ├── MyNetwork.js
+        ├── MyProfile.css
+        ├── MyProfile.js
+        ├── Notifications.js
+        ├── PortfolioBuilder.css
+        ├── PortfolioBuilder.js
+        ├── PortfolioView.css
+        ├── PortfolioView.js
+        ├── PostGigWizard.js
+        ├── PostJobWizard.css
+        ├── RecruiterApplicationDetail.js
+        ├── RecruiterApplicationReview.js
+        ├── RecruiterApplications.js
+        ├── RecruiterGigs.js
+        ├── RecruiterNetwork.js
+        ├── RecruiterVerification.js
+        ├── Redirecting.js
+        ├── RegisterPage.css
+        ├── RegisterPage.js
+        ├── StudentApplicationDetail.js
+        ├── StudentApplications.js
+        ├── StudentGigs.js
+        ├── StudentNetwork.js
+        ├── SubscriptionPage.js
+        ├── SubscriptionStatus.js
+        ├── Terms.js
+        ├── admin
+        │   ├── AdminDashboard.js
+        │   ├── AdminLayout.js
+        │   ├── ApplicationTracking.js
+        │   ├── GigManagement.js
+        │   ├── ManageSubscriptions.js
+        │   ├── SkillsPage.js
+        │   ├── UserManagement.js
+        │   ├── VerificationDetail.js
+        │   └── VerificationsList.js
+        └── post.js
+    ├── reportWebVitals.js
+    ├── services
+        └── mockStudentActions.js
+    ├── setupTests.js
+    └── utils
+        ├── api.js
+        └── some.css
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
