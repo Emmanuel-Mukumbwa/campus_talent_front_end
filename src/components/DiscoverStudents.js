@@ -1,7 +1,13 @@
 // File: src/components/DiscoverStudents.jsx
-
 import React, { useState, useEffect, useCallback } from 'react';
-import { Container, Row, Col, Pagination, Spinner } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Pagination,
+  Card,
+  Placeholder
+} from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import SearchFilters  from './discover/SearchFilters';
@@ -11,35 +17,64 @@ import './DiscoverStudents.css';
 
 const PAGE_SIZE = 2;
 
+// Skeleton placeholder cards
+function StudentCardSkeleton({ count = PAGE_SIZE }) {
+  return (
+    <Row className="student-cards">
+      {Array.from({ length: count }).map((_, idx) => (
+        <Col lg={6} key={idx} className="mb-4">
+          <Card className="card-skeleton">
+            <div className="skeleton-img mb-3" />
+            <Card.Body>
+              <Placeholder animation="glow">
+                <Placeholder xs={6} />
+                <Placeholder xs={8} />
+                <Placeholder xs={4} className="mt-3" />
+              </Placeholder>
+            </Card.Body>
+          </Card>
+        </Col>
+      ))}
+    </Row>
+  );
+}
+
+// Empty-state display
+function EmptyState({ title, message, cta }) {
+  return (
+    <div className="empty-state text-center my-5">
+      <img
+        src="/images/no-results-illustration.svg"
+        alt="No results"
+        className="empty-img mb-4"
+      />
+      <h4>{title}</h4>
+      <p className="text-muted">{message}</p>
+      {cta && (
+        <button className="btn btn-outline-secondary" onClick={cta.onClick}>
+          {cta.text}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function DiscoverStudents() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [me, setMe]          = useState(null);
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters]   = useState({});
 
-  // Trending state
   const [trending, setTrending] = useState([]);
   const [tPage, setTPage]       = useState(1);
   const [tTotal, setTTotal]     = useState(1);
   const [tLoading, setTLoading] = useState(false);
 
-  // Newly joined state
   const [newbies, setNewbies]   = useState([]);
   const [nPage, setNPage]       = useState(1);
   const [nTotal, setNTotal]     = useState(1);
   const [nLoading, setNLoading] = useState(false);
 
-  // Equal‑height cards
-  useEffect(() => {
-    const cards = Array.from(document.querySelectorAll('.student-card'));
-    if (!cards.length) return;
-    cards.forEach(c => (c.style.height = 'auto'));
-    const maxH = cards.reduce((mx, c) => Math.max(mx, c.offsetHeight), 0);
-    cards.forEach(c => (c.style.height = `${maxH}px`));
-  }, [trending, newbies]);
-
-  // Fetch Top Talent
   const fetchTrending = useCallback(async page => {
     setTLoading(true);
     try {
@@ -47,11 +82,9 @@ export default function DiscoverStudents() {
         params: { page, limit: PAGE_SIZE, ...filters }
       });
       setTrending(data.students);
-      // calculate total pages (if total count returned)
       if (data.totalCount != null) {
         setTTotal(Math.ceil(data.totalCount / PAGE_SIZE));
       } else {
-        // fallback: hasMore → next page exists
         setTTotal(page + (data.hasMore ? 1 : 0));
       }
     } catch (err) {
@@ -61,7 +94,6 @@ export default function DiscoverStudents() {
     }
   }, [filters]);
 
-  // Fetch Newly Joined
   const fetchNew = useCallback(async page => {
     setNLoading(true);
     try {
@@ -81,92 +113,89 @@ export default function DiscoverStudents() {
     }
   }, [filters]);
 
-  // Initial load & on filters change
   useEffect(() => {
-    setTPage(1);
-    setNPage(1);
     fetchTrending(1);
     fetchNew(1);
+    setTPage(1);
+    setNPage(1);
   }, [filters, fetchTrending, fetchNew]);
 
-  // Handlers
   const handleFiltersChange = vals => setFilters(vals);
   const handleSendMessage = student => navigate(`/messages/${student.id}`);
 
+  const renderPagination = (page, total, onPageChange) => {
+    const pages = [];
+    for (let p = Math.max(1, page - 1); p <= Math.min(total, page + 1); p++) {
+      pages.push(
+        <Pagination.Item key={p} active={p === page} onClick={() => onPageChange(p)}>
+          {p}
+        </Pagination.Item>
+      );
+    }
+
+    return (
+      <Pagination className="justify-content-center my-3">
+        <Pagination.First onClick={() => onPageChange(1)} disabled={page === 1}/>
+        <Pagination.Prev onClick={() => onPageChange(page - 1)} disabled={page === 1}/>
+        {page > 2 && <Pagination.Ellipsis disabled/>}
+        {pages}
+        {page < total - 1 && <Pagination.Ellipsis disabled/>}
+        <Pagination.Next onClick={() => onPageChange(page + 1)} disabled={page === total}/>
+        <Pagination.Last onClick={() => onPageChange(total)} disabled={page === total}/>
+      </Pagination>
+    );
+  };
+
   return (
     <>
-      {me && location.pathname === '/discover' && (
-        <div style={{ position: 'fixed', top: 80, right: 20 }}>
-          <img
-            src={me.avatar_url?.startsWith('http')
-              ? me.avatar_url
-              : `${process.env.REACT_APP_API_URL}${me.avatar_url}`}
-            alt="Me"
-            width={40}
-            height={40}
-            className="rounded-circle"
-          />
-        </div>
-      )}
-
       <Container className="my-5 discover-students">
         <h2 className="text-success mb-4">Discover Student Talent at Mzuzu University</h2>
 
         <SearchFilters onChange={handleFiltersChange} />
 
-        <Row className="gy-4">
+        <Row>
           <Col lg={6}>
-            {tLoading
-              ? <Spinner animation="border" />
-              : <StudentSection
-                  title="Top Talent"
-                  students={trending}
-                  onSendMessage={handleSendMessage}
-                />
-            }
-
-            <div className="d-flex justify-content-center mt-3">
-              <Pagination>
-                <Pagination.Prev
-                  onClick={() => { if (tPage > 1) { setTPage(p => p - 1); fetchTrending(tPage - 1); } }}
-                  disabled={tPage === 1}
-                />
-                <Pagination.Item active>
-                  Page {tPage} / {tTotal}
-                </Pagination.Item>
-                <Pagination.Next
-                  onClick={() => { if (tPage < tTotal) { setTPage(p => p + 1); fetchTrending(tPage + 1); } }}
-                  disabled={tPage >= tTotal}
-                />
-              </Pagination>
-            </div>
+            {tLoading ? (
+              <StudentCardSkeleton />
+            ) : trending.length ? (
+              <StudentSection
+                title="Top Talent"
+                students={trending}
+                onSendMessage={handleSendMessage}
+              />
+            ) : (
+              <EmptyState
+                title="No Top Talent Found"
+                message="No students are available right now. Please try again later or adjust your filters."
+                cta={{ text: 'Clear Filters', onClick: () => setFilters({}) }}
+              />
+            )}
+            {renderPagination(tPage, tTotal, p => {
+              setTPage(p);
+              fetchTrending(p);
+            })}
           </Col>
 
           <Col lg={6}>
-            {nLoading
-              ? <Spinner animation="border" />
-              : <StudentSection
-                  title="Newly Joined"
-                  students={newbies}
-                  onSendMessage={handleSendMessage}
-                />
-            }
-
-            <div className="d-flex justify-content-center mt-3">
-              <Pagination>
-                <Pagination.Prev
-                  onClick={() => { if (nPage > 1) { setNPage(p => p - 1); fetchNew(nPage - 1); } }}
-                  disabled={nPage === 1}
-                />
-                <Pagination.Item active>
-                  Page {nPage} / {nTotal}
-                </Pagination.Item>
-                <Pagination.Next
-                  onClick={() => { if (nPage < nTotal) { setNPage(p => p + 1); fetchNew(nPage + 1); } }}
-                  disabled={nPage >= nTotal}
-                />
-              </Pagination>
-            </div>
+            {nLoading ? (
+              <StudentCardSkeleton />
+            ) : newbies.length ? (
+              <StudentSection
+                title="Newly Joined"
+                students={newbies}
+                onSendMessage={handleSendMessage}
+              />
+            ) : (
+              <EmptyState
+                title="No Recent Joiners"
+                message="No students are available right now. Please try again later or adjust your filters."
+                cta={{ text: 'Clear Filters', onClick: () => setFilters({}) }}
+              />
+            )}
+            {renderPagination(nPage, nTotal, p => {
+              setNPage(p);
+              fetchNew(p);
+            })}
           </Col>
         </Row>
       </Container>

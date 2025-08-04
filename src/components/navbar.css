@@ -1,19 +1,28 @@
 /* File: src/components/navbar.css */
 
-/* Glassy semi-transparent navbar */
 /* Glassy semi-transparent navbar (enhanced) */
 .glass-nav {
-  background: rgba(255, 255, 255, 0.3);             /* more see-through */
-  backdrop-filter: blur(20px) saturate(180%);        /* stronger blur + color pop */
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.4);        /* ghostly border */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);        /* gentle depth */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
   transition: background 0.3s ease, border 0.3s ease;
+  /* ensure all items (logo + toggler) sit on one line */
+  display: flex;
+  align-items: center;
 }
 
 .glass-nav:hover {
   background: rgba(255, 255, 255, 0.4);
   border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Ensure container flexes its children inline */
+.glass-nav .container {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 /* Logo */
@@ -24,26 +33,30 @@
   letter-spacing: 1px;
 }
 
-/* Search */
-.header-search {
-  flex: 1;
-  max-width: 400px;
-}
-.search-input {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  border-right: none;
-}
-.search-btn {
-  background: #198754;
+/* Nav toggler (burger) always right of logo */
+.navbar-toggler.custom-toggler {
+  margin-left: auto !important;
+  padding: 0.25rem 0.75rem;
   border: none;
-  color: #fff;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  transition: background 0.2s ease;
+  background: transparent;
 }
-.search-btn:hover {
-  background: #157347;
+
+/* Hide default icon placeholder */
+.navbar-toggler.custom-toggler .navbar-toggler-icon {
+  display: none;
+}
+
+/* FaBars icon styling */
+.fa-bars-icon {
+  font-size: 1.25rem;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+/* Hover/focus uses primary green */
+.navbar-toggler.custom-toggler:hover .fa-bars-icon,
+.navbar-toggler.custom-toggler:focus .fa-bars-icon {
+  color: #198754;
 }
 
 /* Nav link & icon */

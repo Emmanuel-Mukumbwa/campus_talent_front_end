@@ -1,5 +1,4 @@
 // File: src/components/GlobalNavbar.jsx
-
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
@@ -8,6 +7,7 @@ import {
   FaBriefcase,
   FaEnvelope,
   FaBell,
+  FaBars   // new import
 } from 'react-icons/fa';
 import {
   Badge,
@@ -27,7 +27,7 @@ export default function GlobalNavbar() {
   const notifRef = useRef();
   const navigate = useNavigate();
 
-  // — 1) Load avatar once —
+  // Load avatar
   useEffect(() => {
     api.get('/api/profile')
       .then(({ data }) => {
@@ -44,7 +44,7 @@ export default function GlobalNavbar() {
       .catch(() => {});
   }, []);
 
-  // — 2) Poll unread message count every 30s —
+  // Poll unread message count
   useEffect(() => {
     let cancelled = false;
     const fetchUnread = async () => {
@@ -62,7 +62,7 @@ export default function GlobalNavbar() {
     return () => { cancelled = true; clearInterval(iv); };
   }, []);
 
-  // — 3) Poll in‑app notifications every 30s —
+  // Poll in-app notifications
   useEffect(() => {
     let cancelled = false;
     const fetchNotifs = async () => {
@@ -79,7 +79,7 @@ export default function GlobalNavbar() {
     return () => { cancelled = true; clearInterval(iv); };
   }, []);
 
-  // — 4) Close notif dropdown on outside click —
+  // Close notif dropdown on outside click
   useEffect(() => {
     const handler = e => {
       if (notifRef.current && !notifRef.current.contains(e.target)) {
@@ -98,13 +98,12 @@ export default function GlobalNavbar() {
   };
 
   const navItems = [
-    { label: 'Home',       to: '/',         Icon: FaHome },
-    { label: 'Gigs',       to: '/jobs',      Icon: FaBriefcase },
+    { label: 'Home', to: '/',        Icon: FaHome },
+    { label: 'Gigs', to: '/jobs',    Icon: FaBriefcase },
     { label: 'Network', to: '/mynetwork', Icon: FaUsers },
-    { label: 'Messaging',  to: '/messages',  Icon: FaEnvelope },
+    { label: 'Messaging', to: '/messages',  Icon: FaEnvelope },
   ];
 
-  // Only unread notifications
   const unread = notifs.filter(n => !n.is_read);
   const unreadCount = unread.length;
 
@@ -114,16 +113,18 @@ export default function GlobalNavbar() {
         <div className="container">
           <NavLink className="navbar-brand logo" to="/">CampusTalent</NavLink>
 
-          {/* Empty spacer in place of the search bar */}
+          {/* spacer if you ever add a search in future */}
           <div className="mx-auto" style={{ width: 300 }} />
 
+          {/* toggler now pushed right and uses FaBars */}
           <button
-            className="navbar-toggler"
+            className="navbar-toggler custom-toggler ms-auto"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarContent"
+            aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon" />
+            <FaBars className="fa-bars-icon" />
           </button>
 
           <div className="collapse navbar-collapse" id="navbarContent">
@@ -147,7 +148,7 @@ export default function GlobalNavbar() {
                 </li>
               ))}
 
-              {/* in‑app notifications */}
+              {/* in-app notifications */}
               <li className="nav-item dropdown px-2" ref={notifRef}>
                 <span
                   className="nav-link position-relative d-flex align-items-center bell-trigger"
@@ -209,7 +210,7 @@ export default function GlobalNavbar() {
                 )}
               </li>
 
-              {/* user avatar / menu */}
+              {/* user avatar/menu */}
               <li className="nav-item dropdown ps-2">
                 <span
                   className="nav-link dropdown-toggle d-flex align-items-center"

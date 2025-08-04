@@ -1,5 +1,4 @@
-// src/pages/HomePage.jsx
-
+// File: src/pages/HomePage.jsx
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate }          from 'react-router-dom';
 import AOS                             from 'aos';
@@ -10,9 +9,10 @@ import {
   Button,
   Modal
 } from 'react-bootstrap';
+import { FaExclamationCircle }         from 'react-icons/fa';  // ensure this import is present
 
 import api              from '../utils/api';
-import Footer           from '../components/Footer';
+// import Footer         from '../components/Footer';      // ← removed
 import DiscoverStudents from '../components/DiscoverStudents';
 import FindJobsBySkill  from '../components/FindJobsBySkill';
 import GlobalNavbar     from '../components/GlobalNavbar';
@@ -23,13 +23,13 @@ import background       from '../assets/images/background.jpg';
 export default function HomePage() {
   const navigate = useNavigate();
 
-  const [greeting, setGreeting]           = useState({ text: '', icon: '' });
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authModalMsg, setAuthModalMsg]   = useState('');
+  const [greeting, setGreeting]               = useState({ text: '', icon: '' });
+  const [showAuthModal, setShowAuthModal]     = useState(false);
+  const [authModalMsg, setAuthModalMsg]       = useState('');
   const [showVerifyButton, setShowVerifyButton] = useState(false);
 
   // `user` undefined while loading, null if not logged in, or the user object
-  const [user, setUser]                   = useState(undefined);
+  const [user, setUser]                       = useState(undefined);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
@@ -167,7 +167,7 @@ export default function HomePage() {
           <h1 className="text-success">
             Welcome to CampusTalent,<br/>
             a platform of student skills and opportunities
-          </h1>
+          </h1> 
           <p>Connect, Learn, and Grow with fellow students and recruiters.</p>
           <Link
             to="/getstarted"
@@ -218,21 +218,26 @@ export default function HomePage() {
         </Container>
       )}
 
-      {/* Only show the job‑browsing widget to students */}
+      {/* Only show the job-browsing widget to students */}
       {showStudent && <FindJobsBySkill />}
 
       <DiscoverStudents />
 
-      {/* Access‑Restricted / Subscription Modal */}
+      {/* Auth/Error Modal */}
       <Modal
         show={showAuthModal}
         onHide={() => setShowAuthModal(false)}
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Action Required</Modal.Title>
+          <Modal.Title>
+            <FaExclamationCircle className="me-2 text-warning" />
+            Oops!
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{authModalMsg}</Modal.Body>
+        <Modal.Body>
+          <p>{authModalMsg}</p>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowAuthModal(false)}>
             Cancel
@@ -260,7 +265,6 @@ export default function HomePage() {
           )}
         </Modal.Footer>
       </Modal>
-
     </div>
   );
 }
