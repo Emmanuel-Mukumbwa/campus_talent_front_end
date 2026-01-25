@@ -46,3 +46,17 @@ router.use('/gig_applications_deliverable', deliverablesRoutes);
 
 
 module.exports = router;
+
+
+
+
+
+// Serve React build assets
+const clientBuildPath = path.join(__dirname, '..', '..', 'campus-talent-frontend', 'build');
+app.use(express.static(clientBuildPath));
+
+// For any non-API route, send back React’s index.html
+app.get(/^\/(?!api).*/, (req, res) => { 
+  res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
+//─────────────────────

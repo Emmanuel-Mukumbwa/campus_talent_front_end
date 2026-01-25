@@ -1,249 +1,119 @@
-├── .gitignore
-├── README.md
-├── package-lock.json
-├── package.json
-├── public
-    ├── index.html
-    ├── logo192.png
-    ├── logo512.png
-    ├── manifest.json
-    └── robots.txt
-└── src
-    ├── App.css
-    ├── App.js
-    ├── App.test.js
-    ├── api
-        └── mockAPI.js
-    ├── assets
-        └── images
-        │   ├── IMG-20250413-WA0008.jpg
-        │   ├── IMG-20250510-WA0009.jpg
-        │   ├── application.jpg
-        │   ├── background.jpg
-        │   ├── background1.jpg
-        │   ├── joblisting1.jpg
-        │   ├── joblisting2.jpg
-        │   ├── join-hero.jpg
-        │   ├── join-hero1.jpg
-        │   ├── skilladdition.jpg
-        │   ├── skilladdition1.jpg
-        │   └── studentdash.jpg
-    ├── components
-        ├── AdminNavbar.css
-        ├── AdminNavbar.js
-        ├── AnalyticsPanel.js
-        ├── DiscoverStudents.css
-        ├── DiscoverStudents.js
-        ├── FiltersSidebar.js
-        ├── FindJobsBySkill.css
-        ├── FindJobsBySkill.js
-        ├── Footer.js
-        ├── GlobalNavbar.js
-        ├── Modal.css
-        ├── Navbar.js
-        ├── NotificationsPanel.js
-        ├── ProtectedRoute.js
-        ├── Recommendations.js
-        ├── Sidebar.js
-        ├── applications
-        │   ├── ApplicationsTable.js
-        │   ├── InlinePreview.js
-        │   ├── StatusTabs.js
-        │   └── TaskChecklist.js
-        ├── apply
-        │   ├── ApplicationStep.js
-        │   └── PortfolioStep.js
-        ├── connections
-        │   ├── ConnectionCard.js
-        │   ├── ConnectionsGrid.js
-        │   ├── ConnectionsSection.js
-        │   ├── index.js
-        │   └── mockSuggestedConnections.js
-        ├── creategig
-        │   ├── GigEscrowStep3.js
-        │   ├── GigFormStep1.js
-        │   ├── GigPreviewStep5.js
-        │   └── GigRequirementsStep4.js
-        ├── discover
-        │   ├── LoadMoreButton.js
-        │   ├── SearchFilters.js
-        │   ├── StudentCard.js
-        │   └── StudentSection.js
-        ├── gigs
-        │   ├── AnalyticsPanel.js
-        │   ├── FiltersSidebar.js
-        │   ├── GigsGrid.css
-        │   ├── GigsGrid.js
-        │   └── Recommendations.js
-        ├── myprofile
-        │   ├── ProfileForm.js
-        │   └── ProfileHeader.js
-        ├── navbar.css
-        ├── portfoliobuilder
-        │   ├── AboutStep.js
-        │   ├── MediaUpload.js
-        │   ├── PreviewStep.js
-        │   ├── ProficiencyStep.js
-        │   ├── ProjectForm.js
-        │   ├── ProjectStep.js
-        │   ├── SkillSelectStep.js
-        │   ├── WizardNavButtons.js
-        │   └── templates.js
-        └── verification
-        │   ├── BasicVerification.js
-        │   └── BusinessVerification.js
-    ├── constants
-        └── programs.js
-    ├── data
-        ├── ApplyGigWizard.js
-        ├── CreateGigWizard.js
-        ├── DiscoverStudents.js
-        ├── EditGigWizard.js
-        ├── PortfolioBuilder.js
-        ├── PortfolioView.js
-        ├── ProjectStep.js
-        ├── RecruiterApplications.js
-        ├── gigs.js
-        ├── index.js
-        └── networkData.js
-    ├── index.css
-    ├── index.js
-    ├── logo.svg
-    ├── pages
-        ├── ApplyGigWizard.js
-        ├── Conversation.css
-        ├── Conversation.js
-        ├── CreateGigWizard.js
-        ├── Disclaimer.js
-        ├── EditGigWizard.js
-        ├── EndorseWizard.css
-        ├── EndorseWizard.js
-        ├── EscrowCheck.js
-        ├── EscrowDetail.js
-        ├── FeesPage.js
-        ├── GetStarted.css
-        ├── GetStarted.js
-        ├── GigDetail.js
-        ├── Gigs.css
-        ├── Gigs.js
-        ├── HomePage.css
-        ├── HomePage.js
-        ├── LoginPage.js
-        ├── Messages.css
-        ├── Messages.js
-        ├── MyNetwork.css
-        ├── MyNetwork.js
-        ├── MyProfile.css
-        ├── MyProfile.js
-        ├── Notifications.js
-        ├── PortfolioBuilder.css
-        ├── PortfolioBuilder.js
-        ├── PortfolioView.css
-        ├── PortfolioView.js
-        ├── PostGigWizard.js
-        ├── PostJobWizard.css
-        ├── RecruiterApplicationDetail.js
-        ├── RecruiterApplicationReview.js
-        ├── RecruiterApplications.js
-        ├── RecruiterGigs.js
-        ├── RecruiterNetwork.js
-        ├── RecruiterVerification.js
-        ├── Redirecting.js
-        ├── RegisterPage.css
-        ├── RegisterPage.js
-        ├── StudentApplicationDetail.js
-        ├── StudentApplications.js
-        ├── StudentGigs.js
-        ├── StudentNetwork.js
-        ├── SubscriptionPage.js
-        ├── SubscriptionStatus.js
-        ├── Terms.js
-        ├── admin
-        │   ├── AdminDashboard.js
-        │   ├── AdminLayout.js
-        │   ├── ApplicationTracking.js
-        │   ├── GigManagement.js
-        │   ├── ManageSubscriptions.js
-        │   ├── SkillsPage.js
-        │   ├── UserManagement.js
-        │   ├── VerificationDetail.js
-        │   └── VerificationsList.js
-        └── post.js
-    ├── reportWebVitals.js
-    ├── services
-        └── mockStudentActions.js
-    ├── setupTests.js
-    └── utils
-        ├── api.js
-        └── some.css
 
-# Getting Started with Create React App
+# Campus Talent — Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Campus Talent is a React-based frontend for a student talent marketplace that connects students, freelancers and recruiters. It provides discovery, applications, portfolio management, messaging, and recruiter tools (gigs/jobs, application review, verification and analytics).
 
-## Available Scripts
+This repository contains the single-page React application. The backend live API is implemented in the sibling folder `campus-talent-backend` (see the `campus-talent-backend` directory in the workspace).
 
-In the project directory, you can run:
+## Why this project exists
 
-### `npm start`
+Students and early-career talent often lack a purpose-built platform to showcase skills and get hired for short-term gigs and entry-level roles. Campus Talent provides:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- A searchable student marketplace with portfolio previews
+- Recruiter workflows for posting gigs/jobs, reviewing candidates and tracking applications
+- Built-in verification and escrow flows to increase trust
+- Simple analytics and notifications for recruiter follow-up
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+If you're a recruiter, this README highlights the features you'd care about and how to run the app locally to evaluate candidates.
 
-### `npm test`
+## Recruiter-facing highlights
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Discover Students: advanced search & filter by skills, programs, availability, and location.
+- Portfolio Previews: quick view of projects, media and skill proficiency.
+- Applications & Tracking: view, filter and review candidate applications; recruiter application review pages and status tabs are available.
+- Post Gigs/Jobs: create, preview and publish gigs with escrow/payment steps and requirements.
+- Recruiter Network & Messaging: connect with candidates, send messages, and manage conversations.
+- Verification: business and recruiter verification workflows to build trust.
+- Analytics: basic dashboards and metrics for posted gigs and candidate engagement.
+- Notifications: realtime-like notifications for new applications, messages and verification events.
 
-### `npm run build`
+## Tech stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Frontend: React (Create React App)
+- Language: JavaScript (ES6+), CSS
+- Patterns: SPA, component-based UI, client API layer in `src/utils/api.js`
+- Backend: Node/Express in `campus-talent-backend` (separate service)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Quick start (developer / recruiter local evaluation)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+These steps assume you're on Windows PowerShell (default for this project environment).
 
-### `npm run eject`
+1) Install dependencies
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```powershell
+npm install
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2) Run the development server
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```powershell
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This starts the frontend at http://localhost:3000. The app expects a backend API; when running locally, run the backend in `campus-talent-backend` or provide a mock API. If the backend runs on a different port, set the appropriate env variable (see `src/utils/api.js` for where the base URL is read).
 
-## Learn More
+3) Build for production
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```powershell
+npm run build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4) Tests
 
-### Code Splitting
+```powershell
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Environment and configuration
 
-### Analyzing the Bundle Size
+- The frontend reads the API base URL from `src/utils/api.js` (inspect or change this file to point to your backend). If you add environment variables, follow CRA's `REACT_APP_` prefixed variables.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Project structure (high level)
 
-### Making a Progressive Web App
+- `src/pages` — top-level pages (Gigs, Recruiter applications, Portfolio builder, etc.)
+- `src/components` — reusable UI components (DiscoverStudents, FiltersSidebar, ApplicationsTable, etc.)
+- `src/services` / `src/utils` — API and helper modules
+- `public` / `build` — static assets and production build output
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Running with the local backend
 
-### Advanced Configuration
+If you want an end-to-end local evaluation, start the backend in `campus-talent-backend` (the workspace includes that folder). Typical steps (in a separate terminal):
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```powershell
+cd campus-talent-backend
+npm install
+npm start
+```
 
-### Deployment
+Then make sure the frontend `api` base URL points to the backend (usually http://localhost:5000 or as configured by the backend). If needed, update `src/utils/api.js`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Security & privacy notes (for recruiters)
 
-### `npm run build` fails to minify
+- Personal data: candidate profiles may contain personal contact info and portfolio media. Treat export or storage of this data according to your org's privacy policy.
+- Verification: the app includes verification flows; do not rely solely on the app for background checks — use formal HR processes where required.
+- Production readiness: for production use enable HTTPS, secure cookies, token expiration and server-side rate limiting.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contributing
+
+Contributions are welcome. If you'd like to:
+
+1. Fork the repo and create a feature branch.
+2. Add meaningful tests for new behavior when possible.
+3. Open a pull request describing the change and why it's needed.
+
+If you're evaluating the app as a recruiter and want new recruiter-specific features (bulk export, ATS integration), open an issue describing the use case and data requirements.
+
+## Known notes & next steps
+
+- The project currently uses a mock API in `src/api/mockAPI.js` for some flows; connect the full backend to exercise applications and verification.
+- Consider adding CI, E2E tests and a seeded demo dataset for easy recruiter evaluation.
+
+## License & contact
+
+This project does not include a license file in the repository. If you'd like to use it commercially, please contact the maintainer in the repo or add a suitable license.
+
+Maintainer / Contact: see repository owner or open an issue on GitHub for questions and recruiting/demo requests.
+
+---
+
+Thank you for checking out Campus Talent — if you'd like, I can also create a short demo script that seeds the backend with example students and example gigs to help recruiters evaluate quickly.
