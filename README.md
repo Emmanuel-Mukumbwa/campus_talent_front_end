@@ -116,4 +116,4 @@ Maintainer / Contact: see repository owner or open an issue on GitHub for questi
 
 ---
 
-Thank you for checking out Campus Talent — if you'd like, I can also create a short demo script that seeds the backend with example students and example gigs to help recruiters evaluate quickly.
+Thank you for checking out Campus Talent 
