@@ -1,21 +1,21 @@
-// File: src/pages/Notifications.jsx
-
+// src/pages/Notifications.jsx
 import React, { useState, useEffect } from 'react';
 import { Container, ListGroup, Button, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 
 export default function Notifications() {
-  const [notifs, setNotifs]   = useState([]);
+  const [notifs, setNotifs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate              = useNavigate();
+  const navigate = useNavigate();
 
   // 1) Load notifications
   const fetchNotifs = async () => {
     try {
       const { data } = await api.get('/api/notifications');
-      setNotifs(data);
+      setNotifs(Array.isArray(data) ? data : []);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Failed to load notifications', err);
     } finally {
       setLoading(false);
@@ -24,26 +24,17 @@ export default function Notifications() {
 
   useEffect(() => {
     fetchNotifs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 2) Mark one as read
-  const markRead = async id => {
+  const markRead = async (id) => {
     try {
       await api.patch(`/api/notifications/${id}/read`);
-      setNotifs(ns => ns.map(n => n.id === id ? { ...n, is_read: 1 } : n));
+      setNotifs((ns) => ns.map((n) => (n.id === id ? { ...n, is_read: 1 } : n)));
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Failed to mark read', err);
-    }
-  };
-
-  // 3) Delete one
-  const deleteOne = async id => {
-    if (!window.confirm('Delete this notification?')) return;
-    try {
-      await api.delete(`/api/notifications/${id}`);
-      setNotifs(ns => ns.filter(n => n.id !== id));
-    } catch (err) {
-      console.error('Failed to delete notification', err);
     }
   };
 
@@ -52,11 +43,12 @@ export default function Notifications() {
     try {
       await Promise.all(
         notifs
-          .filter(n => !n.is_read)
-          .map(n => api.patch(`/api/notifications/${n.id}/read`))
+          .filter((n) => !n.is_read)
+          .map((n) => api.patch(`/api/notifications/${n.id}/read`))
       );
-      setNotifs(ns => ns.map(n => ({ ...n, is_read: 1 })));
+      setNotifs((ns) => ns.map((n) => ({ ...n, is_read: 1 })));
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Failed to mark all read', err);
     }
   };
@@ -74,12 +66,7 @@ export default function Notifications() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h3>Your Notifications</h3>
         <div>
-          <Button
-            variant="outline-success"
-            size="sm"
-            className="me-2"
-            onClick={markAll}
-          >
+          <Button variant="outline-success" size="sm" className="me-2" onClick={markAll}>
             Mark all read
           </Button>
           <Button variant="outline-danger" size="sm" onClick={() => navigate(-1)}>
@@ -92,7 +79,7 @@ export default function Notifications() {
         <p className="text-muted">No notifications.</p>
       ) : (
         <ListGroup as="ul">
-          {notifs.map(n => {
+          {notifs.map((n) => {
             // Safe parse of data payload
             let payload;
             if (typeof n.data === 'string') {
@@ -113,10 +100,10 @@ export default function Notifications() {
               >
                 <div>
                   <div className={n.is_read ? '' : 'fw-bold'}>
-                    {payload.text}
+                    {payload.text ?? payload.message ?? 'Notification'}
                   </div>
                   <small className="text-muted">
-                    {new Date(n.created_at).toLocaleString()}
+                    {n.created_at ? new Date(n.created_at).toLocaleString() : ''}
                   </small>
                 </div>
                 <div className="btn-group btn-group-sm">
@@ -125,9 +112,6 @@ export default function Notifications() {
                       Mark read
                     </Button>
                   )}
-                  {/*<Button variant="danger" onClick={() => deleteOne(n.id)}>
-                    Delete
-                  </Button>*/}
                 </div>
               </ListGroup.Item>
             );
