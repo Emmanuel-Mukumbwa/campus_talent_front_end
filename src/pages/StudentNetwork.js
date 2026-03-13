@@ -1,11 +1,10 @@
-// File: src/pages/student/StudentNetwork.jsx
+// src/pages/student/StudentNetwork.jsx
 import React, { useState } from 'react';
 import { Container, Row, Col, Offcanvas, Button } from 'react-bootstrap';
-import FiltersSidebar from '../components/FiltersSidebar';
-import ConnectionsSection from '../components/connections/ConnectionsSection';
-import Recommendations from '../components/Recommendations';
-import AnalyticsPanel from '../components/AnalyticsPanel';
-import { studentRecs, growthData } from '../data/networkData';
+import FiltersSidebar from '../../components/FiltersSidebar';
+import ConnectionsSection from '../../components/connections/ConnectionsSection';
+import AnalyticsPanel from '../../components/AnalyticsPanel';
+import { growthData } from '../../data/networkData';
 
 export default function StudentNetwork() {
   const [filters, setFilters] = useState({
@@ -23,7 +22,7 @@ export default function StudentNetwork() {
   };
 
   const handleFilterChange = (field, value) => {
-    setFilters(f => ({ ...f, [field]: value }));
+    setFilters((f) => ({ ...f, [field]: value }));
   };
   const clearFilters = () => {
     setFilters({ search: '', program: '', skills: '', dateJoined: '' });
@@ -35,13 +34,7 @@ export default function StudentNetwork() {
         {/* Desktop Sidebar */}
         <Col lg={3} className="d-none d-lg-block border-end">
           <div className="sticky-top pt-3">
-            <FiltersSidebar
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              clearFilters={clearFilters}
-              show
-              onToggle={() => {}}
-            />
+            <FiltersSidebar filters={filters} onFilterChange={handleFilterChange} clearFilters={clearFilters} show onToggle={() => {}} />
           </div>
         </Col>
 
@@ -53,11 +46,6 @@ export default function StudentNetwork() {
             onFilterChange={handleFilterChange}
             clearFilters={clearFilters}
           />
-
-          {/*<div className="mt-4">
-            <h5>Recommendations</h5>
-            <Recommendations recs={studentRecs} columns={1} />
-          </div>*/}
         </Col>
 
         {/* Analytics */}
@@ -77,23 +65,12 @@ export default function StudentNetwork() {
       </Button>
 
       {/* Offcanvas for Mobile */}
-      <Offcanvas
-        show={showFilters}
-        onHide={() => setShowFilters(false)}
-        placement="end"
-        className="h-100"
-      >
+      <Offcanvas show={showFilters} onHide={() => setShowFilters(false)} placement="end" className="h-100">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Filters & Analytics</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <FiltersSidebar
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            clearFilters={clearFilters}
-            show
-            onToggle={() => setShowFilters(false)}
-          />
+          <FiltersSidebar filters={filters} onFilterChange={handleFilterChange} clearFilters={clearFilters} show onToggle={() => setShowFilters(false)} />
           <AnalyticsPanel role="student" analytics={analytics} data={growthData} />
         </Offcanvas.Body>
       </Offcanvas>
