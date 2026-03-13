@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 
-const SKILL_MAP = {
-  Coding:            'Coding',
-  'Video Production':'Video',
-  'Graphics Design': 'Design',
-  'Research Writing':'Research',
-  Tutoring:          'Tutoring',
-};
+// Skill selector temporarily disabled; keep mapping here if re-enabled in future
+// const SKILL_MAP = {
+//   Coding:            'Coding',
+//   'Video Production':'Video',
+//   'Graphics Design': 'Design',
+//   'Research Writing':'Research',
+//   Tutoring:          'Tutoring',
+// };
 
 const BADGES = ['bronze', 'silver', 'gold'];
 
@@ -22,11 +23,11 @@ export default function SearchFilters({ onChange }) {
 
   // fire parent callback any time a field changes
   useEffect(() => {
-    onChange(values);
+    if (typeof onChange === 'function') onChange(values);
   }, [values, onChange]);
 
   const handleChange = (field, v) => {
-    setValues(vals => ({ ...vals, [field]: v }));
+    setValues((vals) => ({ ...vals, [field]: v }));
   };
 
   return (
@@ -36,7 +37,7 @@ export default function SearchFilters({ onChange }) {
           <Form.Control
             placeholder="Search by name or keyword"
             value={values.q}
-            onChange={e => handleChange('q', e.target.value)}
+            onChange={(e) => handleChange('q', e.target.value)}
           />
         </Col>
         {/*<Col>
@@ -51,19 +52,15 @@ export default function SearchFilters({ onChange }) {
           </Form.Select>
         </Col>*/}
         <Col>
-          <Form.Select
-            value={values.badge}
-            onChange={e => handleChange('badge', e.target.value)}
-          >
+          <Form.Select value={values.badge} onChange={(e) => handleChange('badge', e.target.value)}>
             <option value="">All Badges</option>
-            {BADGES.map(b => (
+            {BADGES.map((b) => (
               <option key={b} value={b}>
                 {b.charAt(0).toUpperCase() + b.slice(1)}
               </option>
             ))}
           </Form.Select>
         </Col>
-        
       </Row>
     </div>
   );
