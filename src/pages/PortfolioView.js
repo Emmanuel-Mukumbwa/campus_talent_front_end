@@ -1,5 +1,4 @@
-// File: src/pages/PortfolioView.jsx
-
+// src/pages/PortfolioView.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -30,71 +29,107 @@ import api from '../utils/api';
 import './PortfolioView.css';
 
 export default function PortfolioView() {
-  const navigate      = useNavigate();
+  const navigate = useNavigate();
   const { studentId } = useParams();
 
-  // ── Verification-modal state ─────────────────────────────────────────────
-  const [showAuthModal,    setShowAuthModal]    = useState(false);
-  const [authModalMsg,     setAuthModalMsg]     = useState('');
+  // Verification-modal state
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalMsg, setAuthModalMsg] = useState('');
   const [showVerifyButton, setShowVerifyButton] = useState(false);
-  // ────────────────────────────────────────────────────────────────────────
 
   // portfolio owner profile (endorsements & badge)
   const [ownerProfile, setOwnerProfile] = useState(null);
   // signed-in user
-  const [user, setUser]                 = useState(null);
+  const [user, setUser] = useState(null);
   // portfolio metadata & projects
-  const [data, setData]                 = useState(null);
-  const [projects, setProjects]         = useState([]);
-  const [page, setPage]                 = useState(1);
-  const [limit]                         = useState(6);
-  const [hasMore, setHasMore]           = useState(true);
-  const [loading, setLoading]           = useState(true);
+  const [data, setData] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(6);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(true);
   // avatar src
   const [avatarSrcOwner, setAvatarSrcOwner] = useState('/default-avatar.png');
 
-  const isOwner     = user?.id === Number(studentId);
-  const isAdmin     = user?.role === 'admin';
+  const isOwner = user?.id === Number(studentId);
+  const isAdmin = user?.role === 'admin';
   const isRecruiter = user?.role === 'recruiter';
 
   // badge color map
   const BADGE_COLOR_MAP = {
     Platinum: '#e5e4e2',
-    Gold:     '#FFD700',
-    Silver:   '#C0C0C0',
-    Bronze:   '#CD7F31',
-    default:  '#777887'
+    Gold: '#FFD700',
+    Silver: '#C0C0C0',
+    Bronze: '#CD7F31',
+    default: '#777887'
   };
+
+  const safeFormatDate = (v) => (v ? new Date(v).toLocaleDateString() : '—');
+  const safeFormatDateTime = (v) => (v ? new Date(v).toLocaleString() : '—');
 
   // fetch signed-in user
   useEffect(() => {
     api.get('/api/auth/me')
-      .then(({ data }) => setUser({ ...data, id: data.userId }))
+      .then(({ data: resp }) => {
+        if (!resp) return setUser(null);
+        // some APIs return userId, some id — prefer id if present
+        const id = resp.userId ?? resp.id;
+        setUser({ ...resp, id });
+      })
       .catch(() => setUser(null));
   }, []);
 
-  // ── load portfolio + first page & bump view_count ────────────────────────
+  // load portfolio + first page & bump view_count
   useEffect(() => {
+    let mounted = true;
     setLoading(true);
+
     api.get(`/api/portfolioview/${studentId}?page=1&limit=${limit}`)
       .then(({ data: res }) => {
-        setData(res.portfolio);
-        setProjects(res.portfolio.projects.data);
-        setHasMore(
-          res.portfolio.projects.pagination.page <
-          res.portfolio.projects.pagination.totalPages
-        );
+        if (!mounted) return;
+        const portfolio = res?.portfolio ?? null;
+        if (!portfolio) {
+          setData(null);
+          setProjects([]);
+          setHasMore(false);
+          return;
+        }
+
+        setData(portfolio);
+
+        const projData = portfolio?.projects?.data ?? [];
+        setProjects(Array.isArray(projData) ? projData : []);
+
+        const pagination = portfolio?.projects?.pagination ?? { page: 1, totalPages: 1 };
+        setPage(pagination.page ?? 1);
+        setHasMore((pagination.page ?? 1) < (pagination.totalPages ?? 1));
       })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load portfolio', err);
+        setData(null);
+        setProjects([]);
+        setHasMore(false);
+      })
+      .finally(() => mounted && setLoading(false));
+
+    return () => { mounted = false; };
   }, [studentId, limit]);
-  // ────────────────────────────────────────────────────────────────────────
 
   // fetch owner’s profile (endorsementPoints & badge)
   useEffect(() => {
+    let mounted = true;
     api.get(`/api/profile/${studentId}`)
-      .then(({ data }) => setOwnerProfile(data))
-      .catch(console.error);
+      .then(({ data }) => {
+        if (!mounted) return;
+        setOwnerProfile(data ?? null);
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load owner profile', err);
+        setOwnerProfile(null);
+      });
+    return () => { mounted = false; };
   }, [studentId]);
 
   // compute avatar URL
@@ -113,29 +148,42 @@ export default function PortfolioView() {
 
   // fetch additional projects on scroll
   const fetchMore = () => {
-    api.get(`/api/portfolioview/${studentId}?page=${page + 1}&limit=${limit}`)
+    const nextPage = (page || 1) + 1;
+    api.get(`/api/portfolioview/${studentId}?page=${nextPage}&limit=${limit}`)
       .then(({ data: res }) => {
-        setProjects(prev => [...prev, ...res.portfolio.projects.data]);
-        const { page: p, totalPages } = res.portfolio.projects.pagination;
+        const incoming = res?.portfolio?.projects?.data ?? [];
+        setProjects((prev) => [...prev, ...(Array.isArray(incoming) ? incoming : [])]);
+
+        const pagination = res?.portfolio?.projects?.pagination ?? { page: nextPage, totalPages: nextPage };
+        const p = pagination.page ?? nextPage;
         setPage(p);
-        setHasMore(p < totalPages);
+        setHasMore(p < (pagination.totalPages ?? p));
       })
-      .catch(console.error);
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Failed to fetch more projects', err);
+        // on failure, stop further requests to avoid loops
+        setHasMore(false);
+      });
   };
 
   // delete portfolio (admin only)
   const handleDelete = () => {
     if (!window.confirm('Delete this portfolio?')) return;
-    api.delete(`/api/portfolio/${data.id}`)
+    api.delete(`/api/portfolio/${data?.id}`)
       .then(() => navigate('/'))
-      .catch(console.error);
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Failed to delete portfolio', err);
+        // optionally show a toast in the real app
+      });
   };
 
-  // ── handle Endorse click with verification check ─────────────────────────
+  // handle Endorse click with verification check
   const handleEndorseClick = async () => {
     try {
       const { data: statusResp } = await api.get('/api/recruiters/verification-status');
-      const status = statusResp.verification_status;
+      const status = statusResp?.verification_status;
       if (status === 'fully_verified') {
         navigate(`/endorse/${studentId}`);
       } else {
@@ -144,13 +192,13 @@ export default function PortfolioView() {
         setShowAuthModal(true);
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Verification check failed', err);
       setAuthModalMsg('Unable to check your verification status. Please try again.');
       setShowVerifyButton(false);
       setShowAuthModal(true);
     }
   };
-  // ────────────────────────────────────────────────────────────────────────
 
   if (loading) {
     return (
@@ -159,36 +207,37 @@ export default function PortfolioView() {
       </div>
     );
   }
+
   if (!data) {
     return <p className="p-4 text-danger">Portfolio not found or you’re not authorized.</p>;
   }
 
+  // destructure with safe defaults
   const {
-    name,
-    headline,
-    about,
-    proficiencies,
-    skills,
-    university,
-    program,
-    faculty,
-    year,
-    availability,
-    payment_pref,
-    completedGigsCount,
-    last_active,
-    profile_strength,
-    status,
-    view_count,
-    portfolio_created
+    name = '—',
+    headline = '',
+    about = '',
+    skills = [],
+    university = '',
+    program = '',
+    faculty = '',
+    year = '',
+    availability = '—',
+    payment_pref = '—',
+    completedGigsCount = 0,
+    last_active = null,
+    profile_strength = 0,
+    status = '—',
+    view_count = 0,
+    portfolio_created = null
   } = data;
 
-  const badgeName  = ownerProfile?.badge;
+  const badgeName = ownerProfile?.badge;
   const badgeColor = BADGE_COLOR_MAP[badgeName] || BADGE_COLOR_MAP.default;
 
-  const withTooltip = text => (
+  const withTooltip = (text) => (
     <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip-desc">{text}</Tooltip>}>
-      <span>{text.length > 100 ? text.slice(0, 100) + '…' : text}</span>
+      <span>{typeof text === 'string' && text.length > 100 ? `${text.slice(0, 100)}…` : text}</span>
     </OverlayTrigger>
   );
 
@@ -213,27 +262,19 @@ export default function PortfolioView() {
             </Col>
             <Col xs={12} sm className="d-none d-sm-block">
               <p className="text-success mb-1">{headline}</p>
-              <Badge bg="success" className="me-1">{university}</Badge>
-              <Badge bg="success" className="me-1">{program}</Badge>
-              <Badge bg="success" className="me-1">{faculty}, Year {year}</Badge>
+              {university && <Badge bg="success" className="me-1">{university}</Badge>}
+              {program && <Badge bg="success" className="me-1">{program}</Badge>}
+              {(faculty || year) && <Badge bg="success" className="me-1">{faculty}{faculty && year ? ', ' : ''}{year}</Badge>}
             </Col>
             <Col xs="auto" className="d-flex gap-2">
               {isOwner && (
-                <Button
-                  variant="outline-success"
-                  onClick={() => navigate('/portfolio-builder')}
-                >
-                  <FaPencilAlt className="me-1" />
-                  Edit
+                <Button variant="outline-success" onClick={() => navigate('/portfolio-builder')}>
+                  <FaPencilAlt className="me-1" /> Edit
                 </Button>
               )}
               {isRecruiter && !isOwner && (
-                <Button
-                  variant="outline-success"
-                  onClick={handleEndorseClick}
-                >
-                  <FaCheckCircle className="me-1" />
-                  Endorse
+                <Button variant="outline-success" onClick={handleEndorseClick}>
+                  <FaCheckCircle className="me-1" /> Endorse
                 </Button>
               )}
               {isAdmin && (
@@ -262,7 +303,7 @@ export default function PortfolioView() {
               <Card className="text-center">
                 <FaChartLine className="stat-icon text-success" size={32}/>
                 <Card.Body>
-                  <Card.Title>{profile_strength}%</Card.Title>
+                  <Card.Title>{profile_strength ?? 0}%</Card.Title>
                   <Card.Text>Profile Strength</Card.Text>
                 </Card.Body>
               </Card>
@@ -271,7 +312,7 @@ export default function PortfolioView() {
               <Card className="text-center">
                 <FaCheckCircle className="stat-icon text-success" size={32}/>
                 <Card.Body>
-                  <Card.Title>{completedGigsCount}</Card.Title>
+                  <Card.Title>{completedGigsCount ?? 0}</Card.Title>
                   <Card.Text>Completed Gigs</Card.Text>
                 </Card.Body>
               </Card>
@@ -289,7 +330,7 @@ export default function PortfolioView() {
               <Card className="text-center">
                 <FaTag className="stat-icon text-success" size={32}/>
                 <Card.Body>
-                  <Card.Title>{skills.length}</Card.Title>
+                  <Card.Title>{Array.isArray(skills) ? skills.length : 0}</Card.Title>
                   <Card.Text>Skills</Card.Text>
                 </Card.Body>
               </Card>
@@ -306,7 +347,7 @@ export default function PortfolioView() {
                   className="p-2"
                   style={{ backgroundColor: badgeColor, color: '#fff', fontSize: '1rem' }}
                 >
-                  {badgeName.toUpperCase()}
+                  {String(badgeName).toUpperCase()}
                 </Badge>
               </Card.Body>
             </Card>
@@ -315,11 +356,11 @@ export default function PortfolioView() {
           <Card className="profile-card mb-4">
             <ListGroup variant="flush">
               <ListGroup.Item><strong>Status:</strong> <Badge bg="success">{status}</Badge></ListGroup.Item>
-              <ListGroup.Item><strong>Joined:</strong> {new Date(portfolio_created).toLocaleDateString()}</ListGroup.Item>
-              <ListGroup.Item><strong>Views:</strong> {view_count}</ListGroup.Item>
-              <ListGroup.Item><strong>Last Active:</strong> {new Date(last_active).toLocaleString()}</ListGroup.Item>
-              <ListGroup.Item><strong>Availability:</strong> {availability}</ListGroup.Item>
-              <ListGroup.Item><strong>Payment Pref.:</strong> {payment_pref}</ListGroup.Item>
+              <ListGroup.Item><strong>Joined:</strong> {safeFormatDate(portfolio_created)}</ListGroup.Item>
+              <ListGroup.Item><strong>Views:</strong> {view_count ?? 0}</ListGroup.Item>
+              <ListGroup.Item><strong>Last Active:</strong> {safeFormatDateTime(last_active)}</ListGroup.Item>
+              <ListGroup.Item><strong>Availability:</strong> {availability ?? '—'}</ListGroup.Item>
+              <ListGroup.Item><strong>Payment Pref.:</strong> {payment_pref ?? '—'}</ListGroup.Item>
             </ListGroup>
           </Card>
         </Tab>
@@ -327,8 +368,8 @@ export default function PortfolioView() {
         {/* Skills */}
         <Tab eventKey="skills" title="Skills">
           <Row className="g-3 mb-4">
-            {skills.map(s => (
-              <Col key={s.id} xs={6} md={4}>
+            {(Array.isArray(skills) ? skills : []).map((s) => (
+              <Col key={s.id ?? s.name} xs={6} md={4}>
                 <Card className="h-100">
                   <Card.Body className="text-center">
                     <FaTag size={24} className="text-success" />
@@ -359,7 +400,7 @@ export default function PortfolioView() {
             endMessage={<p className="text-center mt-3">No more projects</p>}
           >
             <Row className="gy-4 mb-4">
-              {projects.map(proj => (
+              {projects.map((proj) => (
                 <Col key={proj.id} xs={12} md={6} lg={4}>
                   <Card className="h-100 shadow-sm">
                     <Card.Body className="d-flex flex-column">
@@ -369,15 +410,15 @@ export default function PortfolioView() {
                       </div>
                       {(proj.start_date || proj.end_date) && (
                         <small className="text-muted mb-2">
-                          {proj.start_date ? new Date(proj.start_date).toLocaleDateString() : '—'} – {proj.end_date ? new Date(proj.end_date).toLocaleDateString() : 'Present'}
+                          {proj.start_date ? safeFormatDate(proj.start_date) : '—'} – {proj.end_date ? safeFormatDate(proj.end_date) : 'Present'}
                         </small>
                       )}
                       <Card.Text className="flex-grow-1 mb-2">
-                        {withTooltip(proj.description)}
+                        {withTooltip(proj.description ?? '')}
                       </Card.Text>
                       {Array.isArray(proj.skills_used) && proj.skills_used.length > 0 && (
                         <div className="mb-2">
-                          {proj.skills_used.map(skill => (
+                          {proj.skills_used.map((skill) => (
                             <Badge bg="success" text="light" className="me-1 mb-1" key={skill}>{skill}</Badge>
                           ))}
                         </div>
@@ -399,7 +440,7 @@ export default function PortfolioView() {
                             <Image
                               key={i}
                               src={m}
-                              alt={`${proj.title} media ${i+1}`}
+                              alt={`${proj.title} media ${i + 1}`}
                               thumbnail
                               style={{ maxWidth: '100px', maxHeight: '100px' }}
                             />
@@ -415,7 +456,7 @@ export default function PortfolioView() {
         </Tab>
       </Tabs>
 
-      {/* ── Verification Modal ─────────────────────────────────────────────── */}
+      {/* Verification Modal */}
       <Modal
         show={showAuthModal}
         onHide={() => setShowAuthModal(false)}
@@ -452,7 +493,6 @@ export default function PortfolioView() {
           )}
         </Modal.Footer>
       </Modal>
-      {/* ─────────────────────────────────────────────────────────────────────── */}
     </Container>
   );
 }
