@@ -1,4 +1,4 @@
-// File: src/components/DiscoverStudents.jsx
+// src/components/DiscoverStudents.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container,
@@ -8,11 +8,11 @@ import {
   Card,
   Placeholder
 } from 'react-bootstrap';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import SearchFilters  from './discover/SearchFilters';
+import SearchFilters from './discover/SearchFilters';
 import StudentSection from './discover/StudentSection';
-import api            from '../utils/api';
+import api from '../utils/api';
 import './DiscoverStudents.css';
 
 const PAGE_SIZE = 2;
@@ -61,73 +61,87 @@ function EmptyState({ title, message, cta }) {
 
 export default function DiscoverStudents() {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const [filters, setFilters]   = useState({});
+  const [filters, setFilters] = useState({});
 
   const [trending, setTrending] = useState([]);
-  const [tPage, setTPage]       = useState(1);
-  const [tTotal, setTTotal]     = useState(1);
+  const [tPage, setTPage] = useState(1);
+  const [tTotal, setTTotal] = useState(1);
   const [tLoading, setTLoading] = useState(false);
 
-  const [newbies, setNewbies]   = useState([]);
-  const [nPage, setNPage]       = useState(1);
-  const [nTotal, setNTotal]     = useState(1);
+  const [newbies, setNewbies] = useState([]);
+  const [nPage, setNPage] = useState(1);
+  const [nTotal, setNTotal] = useState(1);
   const [nLoading, setNLoading] = useState(false);
 
-  const fetchTrending = useCallback(async page => {
-    setTLoading(true);
-    try {
-      const { data } = await api.get('/api/students1/trending', {
-        params: { page, limit: PAGE_SIZE, ...filters }
-      });
-      setTrending(data.students);
-      if (data.totalCount != null) {
-        setTTotal(Math.ceil(data.totalCount / PAGE_SIZE));
-      } else {
-        setTTotal(page + (data.hasMore ? 1 : 0));
+  const fetchTrending = useCallback(
+    async (page) => {
+      setTLoading(true);
+      try {
+        const { data } = await api.get('/api/students1/trending', {
+          params: { page, limit: PAGE_SIZE, ...filters }
+        });
+        setTrending(Array.isArray(data.students) ? data.students : []);
+        if (data.totalCount != null) {
+          setTTotal(Math.max(1, Math.ceil(data.totalCount / PAGE_SIZE)));
+        } else {
+          setTTotal(page + (data.hasMore ? 1 : 0));
+        }
+      } catch (err) {
+        // keep console.error for server-side debugging
+        // eslint-disable-next-line no-console
+        console.error('fetchTrending error', err);
+      } finally {
+        setTLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setTLoading(false);
-    }
-  }, [filters]);
+    },
+    [filters]
+  );
 
-  const fetchNew = useCallback(async page => {
-    setNLoading(true);
-    try {
-      const { data } = await api.get('/api/students1/new', {
-        params: { page, limit: PAGE_SIZE, ...filters }
-      });
-      setNewbies(data.students);
-      if (data.totalCount != null) {
-        setNTotal(Math.ceil(data.totalCount / PAGE_SIZE));
-      } else {
-        setNTotal(page + (data.hasMore ? 1 : 0));
+  const fetchNew = useCallback(
+    async (page) => {
+      setNLoading(true);
+      try {
+        const { data } = await api.get('/api/students1/new', {
+          params: { page, limit: PAGE_SIZE, ...filters }
+        });
+        setNewbies(Array.isArray(data.students) ? data.students : []);
+        if (data.totalCount != null) {
+          setNTotal(Math.max(1, Math.ceil(data.totalCount / PAGE_SIZE)));
+        } else {
+          setNTotal(page + (data.hasMore ? 1 : 0));
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('fetchNew error', err);
+      } finally {
+        setNLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setNLoading(false);
-    }
-  }, [filters]);
+    },
+    [filters]
+  );
 
   useEffect(() => {
-    fetchTrending(1);
-    fetchNew(1);
+    // reset to first page whenever filters change
     setTPage(1);
     setNPage(1);
+    fetchTrending(1);
+    fetchNew(1);
   }, [filters, fetchTrending, fetchNew]);
 
-  const handleFiltersChange = vals => setFilters(vals);
-  const handleSendMessage = student => navigate(`/messages/${student.id}`);
+  const handleFiltersChange = (vals) => setFilters(vals || {});
+  const handleSendMessage = (student) => navigate(`/messages/${student.id}`);
 
   const renderPagination = (page, total, onPageChange) => {
     const pages = [];
+    // show a small window of pages around current page
     for (let p = Math.max(1, page - 1); p <= Math.min(total, page + 1); p++) {
       pages.push(
-        <Pagination.Item key={p} active={p === page} onClick={() => onPageChange(p)}>
+        <Pagination.Item
+          key={p}
+          active={p === page}
+          onClick={() => onPageChange(p)}
+        >
           {p}
         </Pagination.Item>
       );
@@ -135,13 +149,22 @@ export default function DiscoverStudents() {
 
     return (
       <Pagination className="justify-content-center my-3">
-        <Pagination.First onClick={() => onPageChange(1)} disabled={page === 1}/>
-        <Pagination.Prev onClick={() => onPageChange(page - 1)} disabled={page === 1}/>
-        {page > 2 && <Pagination.Ellipsis disabled/>}
+        <Pagination.First onClick={() => onPageChange(1)} disabled={page === 1} />
+        <Pagination.Prev
+          onClick={() => onPageChange(Math.max(1, page - 1))}
+          disabled={page === 1}
+        />
+        {page > 2 && <Pagination.Ellipsis disabled />}
         {pages}
-        {page < total - 1 && <Pagination.Ellipsis disabled/>}
-        <Pagination.Next onClick={() => onPageChange(page + 1)} disabled={page === total}/>
-        <Pagination.Last onClick={() => onPageChange(total)} disabled={page === total}/>
+        {page < total - 1 && <Pagination.Ellipsis disabled />}
+        <Pagination.Next
+          onClick={() => onPageChange(Math.min(total, page + 1))}
+          disabled={page === total}
+        />
+        <Pagination.Last
+          onClick={() => onPageChange(total)}
+          disabled={page === total}
+        />
       </Pagination>
     );
   };
@@ -170,7 +193,7 @@ export default function DiscoverStudents() {
                 cta={{ text: 'Clear Filters', onClick: () => setFilters({}) }}
               />
             )}
-            {renderPagination(tPage, tTotal, p => {
+            {renderPagination(tPage, tTotal, (p) => {
               setTPage(p);
               fetchTrending(p);
             })}
@@ -192,7 +215,7 @@ export default function DiscoverStudents() {
                 cta={{ text: 'Clear Filters', onClick: () => setFilters({}) }}
               />
             )}
-            {renderPagination(nPage, nTotal, p => {
+            {renderPagination(nPage, nTotal, (p) => {
               setNPage(p);
               fetchNew(p);
             })}
