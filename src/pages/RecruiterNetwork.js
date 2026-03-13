@@ -1,10 +1,9 @@
-// File: src/pages/RecruiterNetwork.jsx
+// src/pages/RecruiterNetwork.jsx
 import React, { useState } from 'react';
 import { Container, Row, Col, Offcanvas, Button } from 'react-bootstrap';
-import FiltersSidebar from '../components/FiltersSidebar';
-import ConnectionsSection from '../components/connections/ConnectionsSection';
-import AnalyticsPanel from '../components/AnalyticsPanel';
-import { recruiterRecs } from '../data/networkData';
+import FiltersSidebar from '../../components/FiltersSidebar';
+import ConnectionsSection from '../../components/connections/ConnectionsSection';
+import AnalyticsPanel from '../../components/AnalyticsPanel';
 
 export default function RecruiterNetwork() {
   const [filters, setFilters] = useState({
@@ -21,7 +20,7 @@ export default function RecruiterNetwork() {
   };
 
   const handleFilterChange = (field, value) => {
-    setFilters(f => ({ ...f, [field]: value }));
+    setFilters((f) => ({ ...f, [field]: value }));
   };
   const clearFilters = () => {
     setFilters({ search: '', program: '', dateJoined: '' });
@@ -33,28 +32,13 @@ export default function RecruiterNetwork() {
         {/* Desktop Sidebar */}
         <Col lg={3} className="d-none d-lg-block border-end">
           <div className="sticky-top pt-3">
-            <FiltersSidebar
-              viewerRole="recruiter"               
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              clearFilters={clearFilters}
-            />
+            <FiltersSidebar viewerRole="recruiter" filters={filters} onFilterChange={handleFilterChange} clearFilters={clearFilters} />
           </div>
         </Col>
 
-        {/* Main Content */} 
+        {/* Main Content */}
         <Col lg={6} xs={12}>
-          <ConnectionsSection
-            viewerRole="recruiter"
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            clearFilters={clearFilters}
-          />
-
-          {/*<div className="mt-4">
-            <h5>Recommendations</h5>
-            <Recommendations recs={recruiterRecs} columns={1} />
-          </div>*/}
+          <ConnectionsSection viewerRole="recruiter" filters={filters} onFilterChange={handleFilterChange} clearFilters={clearFilters} />
         </Col>
 
         {/* Analytics */}
@@ -74,22 +58,12 @@ export default function RecruiterNetwork() {
       </Button>
 
       {/* Offcanvas for Mobile */}
-      <Offcanvas
-        show={showFilters}
-        onHide={() => setShowFilters(false)}
-        placement="end"
-        className="h-100"
-      >
+      <Offcanvas show={showFilters} onHide={() => setShowFilters(false)} placement="end" className="h-100">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Filters & Analytics</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <FiltersSidebar
-            viewerRole="recruiter"               // ← and here
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            clearFilters={clearFilters}
-          />
+          <FiltersSidebar viewerRole="recruiter" filters={filters} onFilterChange={handleFilterChange} clearFilters={clearFilters} />
           <AnalyticsPanel role="recruiter" analytics={analytics} />
         </Offcanvas.Body>
       </Offcanvas>
