@@ -1,4 +1,4 @@
-// File: src/components/connections/ConnectionCard.js
+// src/components/connections/ConnectionCard.js
 import React from 'react';
 import {
   Card,
@@ -21,37 +21,48 @@ import { useNavigate } from 'react-router-dom';
 export default function ConnectionCard({
   conn,
   avatar,
-  viewerRole,   // 'student' or 'recruiter'
-  viewerId,     // your own user ID (for '/myprofile' logic)
+  viewerRole, // 'student' or 'recruiter'
+  viewerId, // your own user ID (for '/myprofile' logic)
 }) {
   const navigate = useNavigate();
 
-  const isViewerStudent = viewerRole === 'student';
   const isViewerRecruit = viewerRole === 'recruiter';
-  const isTargetStudent = conn.role === 'student';
+  const isTargetStudent = conn?.role === 'student';
 
-  // “time ago” helper
-  const timeAgo = dateStr => {
-    const diffMs = Date.now() - new Date(dateStr).getTime();
-    const mins   = Math.floor(diffMs / 60000);
-    if (mins < 60) return `${mins}m ago`;
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `${hrs}h ago`;
-    return `${Math.floor(hrs/24)}d ago`;
+  // “time ago” helper (defensive)
+  const timeAgo = (dateStr) => {
+    try {
+      const diffMs = Date.now() - new Date(dateStr).getTime();
+      const mins = Math.floor(diffMs / 60000);
+      if (mins < 60) return `${mins}m ago`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h ago`;
+      return `${Math.floor(hrs / 24)}d ago`;
+    } catch {
+      return '—';
+    }
   };
 
   // Header title & subtitle
   const headerTitle = isTargetStudent
-    ? `${conn.program} — ${conn.year}`
-    : conn.company || conn.name;
-  const headerSubtitle = isTargetStudent
-    ? <><GeoAlt size={12} className="me-1"/> {conn.university}</>
-    : conn.headline
-      ? conn.headline
-      : <><Briefcase size={12} className="me-1"/> {conn.position}</>;
+    ? `${conn?.program ?? '—'} — ${conn?.year ?? '—'}`
+    : conn?.company ?? conn?.name ?? '—';
+
+  const headerSubtitle = isTargetStudent ? (
+    <>
+      <GeoAlt size={12} className="me-1" /> {conn?.university ?? '—'}
+    </>
+  ) : conn?.headline ? (
+    conn.headline
+  ) : (
+    <>
+      <Briefcase size={12} className="me-1" /> {conn?.position ?? '—'}
+    </>
+  );
 
   // AVATAR CLICK
   const handleAvatarClick = () => {
+    if (!conn) return;
     if (conn.id === viewerId) {
       navigate('/myprofile');
     } else {
@@ -60,16 +71,18 @@ export default function ConnectionCard({
   };
 
   // PRIMARY BUTTON LOGIC
-  let buttonLabel, buttonIcon, buttonAction;
+  let buttonLabel;
+  let buttonIcon;
+  let buttonAction;
   if (isViewerRecruit && isTargetStudent) {
-    // Recruiter viewing a student → still show “View Portfolio”
-    buttonLabel  = 'View Portfolio';
-    buttonIcon   = <Briefcase className="me-1" />;
+    // Recruiter viewing a student → "View Portfolio" for recruiter route
+    buttonLabel = 'View Portfolio';
+    buttonIcon = <Briefcase className="me-1" />;
     buttonAction = () => navigate(`/recruiter/portfolioview/${conn.id}`);
   } else {
     // Everyone else → send a message
-    buttonLabel  = 'Send Message';
-    buttonIcon   = <ChatDots className="me-1" />;
+    buttonLabel = 'Send Message';
+    buttonIcon = <ChatDots className="me-1" />;
     buttonAction = () => navigate(`/messages/${conn.id}`);
   }
 
@@ -79,7 +92,7 @@ export default function ConnectionCard({
         <Card.Header className="d-flex align-items-center bg-light">
           <img
             src={avatar || '/default-avatar.png'}
-            alt={conn.name}
+            alt={conn?.name ?? 'User'}
             className="avatar rounded-circle me-3"
             width={60}
             height={60}
@@ -87,9 +100,10 @@ export default function ConnectionCard({
             onClick={handleAvatarClick}
           />
           <div>
-            <h6 className="mb-1">{conn.name}</h6>
+            <h6 className="mb-1">{conn?.name ?? '—'}</h6>
             <small className="text-muted">
-              {headerTitle}<br/>
+              {headerTitle}
+              <br />
               {headerSubtitle}
             </small>
           </div>
@@ -100,18 +114,18 @@ export default function ConnectionCard({
             {isTargetStudent && (
               <>
                 <small>
-                  <Folder2 className="me-1"/>
-                  projects: {conn.majorProjects}
+                  <Folder2 className="me-1" />
+                  projects: {conn?.majorProjects ?? 0}
                 </small>
                 <small>
-                  <BarChart className="me-1"/>
-                  {conn.profileStrength}%
+                  <BarChart className="me-1" />
+                  {conn?.profileStrength ?? 0}%
                 </small>
               </>
             )}
             <small>
-              Active: {timeAgo(conn.lastActive)}
-              {conn.isVerified && (
+              Active: {timeAgo(conn?.lastActive)}
+              {conn?.isVerified && (
                 <Badge bg="info" className="ms-2">
                   ✔️ Verified
                 </Badge>
@@ -120,29 +134,27 @@ export default function ConnectionCard({
           </div>
 
           <div className="d-flex flex-wrap gap-2 mb-3">
-            {isTargetStudent
-              ? conn.badges?.slice(0,3).map(b => (
-                  <Badge bg="success" text="light" key={b}>
-                    <Star className="me-1 text-light"/>{b}
-                  </Badge>
-                ))
-              : (
-                  <Badge bg="success" text="light">
-                    <Briefcase className="me-1 text-light"/>
-                    {conn.openGigs} Openings
-                  </Badge>
-                )
-            }
+            {isTargetStudent ? (
+              conn?.badges?.slice(0, 3).map((b) => (
+                <Badge bg="success" text="light" key={b}>
+                  <Star className="me-1 text-light" />
+                  {b}
+                </Badge>
+              ))
+            ) : (
+              <Badge bg="success" text="light">
+                <Briefcase className="me-1 text-light" />
+                {conn?.openGigs ?? 0} Openings
+              </Badge>
+            )}
           </div>
 
           <div className="mb-3">
-            <h6 className="text-muted small mb-2">
-              {isTargetStudent ? 'Skills' : 'Skills Required'}
-            </h6>
+            <h6 className="text-muted small mb-2">{isTargetStudent ? 'Skills' : 'Skills Required'}</h6>
             <div className="d-flex flex-wrap gap-1">
-              {(isTargetStudent ? conn.skillsOverlap : conn.matchedSkills)
-                .slice(0,4)
-                .map(skill => (
+              {((isTargetStudent ? conn?.skillsOverlap : conn?.matchedSkills) || [])
+                .slice(0, 4)
+                .map((skill) => (
                   <OverlayTrigger
                     key={skill}
                     placement="top"
@@ -152,18 +164,12 @@ export default function ConnectionCard({
                       {skill}
                     </Badge>
                   </OverlayTrigger>
-                ))
-              }
+                ))}
             </div>
           </div>
 
           <div className="d-flex gap-2">
-            <Button
-              variant="outline-success"
-              size="sm"
-              className="flex-grow-1"
-              onClick={buttonAction}
-            >
+            <Button variant="outline-success" size="sm" className="flex-grow-1" onClick={buttonAction}>
               {buttonIcon}
               {buttonLabel}
             </Button>
