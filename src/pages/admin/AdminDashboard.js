@@ -8,26 +8,26 @@ import {
   ListGroup,
   Spinner,
   Alert,
-  Button
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
 
 export default function AdminDashboard() {
-  const [stats, setStats]               = useState(null);
+  const [stats, setStats] = useState(null);
   const [recentActivity, setRecentActivity] = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [error, setError]               = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchOverview() {
       try {
         const { data } = await api.get('/api/admin/dashboard');
-        setStats(data.stats);
-        setRecentActivity(data.recentActivity);
+        setStats(data.stats ?? {});
+        setRecentActivity(Array.isArray(data.recentActivity) ? data.recentActivity : []);
       } catch (err) {
-        console.error(err);
+        // eslint-disable-next-line no-console
+        console.error('fetchOverview error', err);
         setError('Failed to load dashboard data.');
       } finally {
         setLoading(false);
@@ -52,15 +52,15 @@ export default function AdminDashboard() {
     );
   }
 
-  // Map your backend keys to human‑friendly labels
+  // Map your backend keys to human-friendly labels
   const statsMap = [
-    { key: 'activeUsers',           label: 'Active Users' },
-    { key: 'activeGigs',            label: 'Open Gigs' },
-    { key: 'completedGigs',         label: 'Completed Gigs' },
-    { key: 'activeApplications',    label: 'In‑Progress Applications' },
+    { key: 'activeUsers', label: 'Active Users' },
+    { key: 'activeGigs', label: 'Open Gigs' },
+    { key: 'completedGigs', label: 'Completed Gigs' },
+    { key: 'activeApplications', label: 'In-Progress Applications' },
     { key: 'completedApplications', label: 'Completed Applications' },
-    { key: 'pendingVerifications',  label: 'Pending Verifications' },
-    { key: 'totalSkills',           label: 'Total Skills', isLink: true, link: '/admin/skills' },
+    { key: 'pendingVerifications', label: 'Pending Verifications' },
+    { key: 'totalSkills', label: 'Total Skills', isLink: true, link: '/admin/skills' },
   ];
 
   return (
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
               onClick={isLink ? () => navigate(link) : undefined}
             >
               <Card.Body className="text-center">
-                <Card.Title>{stats[key]}</Card.Title>
+                <Card.Title>{stats?.[key] ?? 0}</Card.Title>
                 <Card.Text>{label}</Card.Text>
               </Card.Body>
               {isLink && (
@@ -94,12 +94,11 @@ export default function AdminDashboard() {
       <Card>
         <Card.Header className="bg-success text-white">Recent Activity</Card.Header>
         <ListGroup variant="flush">
-          {recentActivity.length > 0 
-            ? recentActivity.map((act, i) => (
-                <ListGroup.Item key={i}>{act}</ListGroup.Item>
-              ))
-            : <ListGroup.Item>No recent activity.</ListGroup.Item>
-          }
+          {recentActivity.length > 0 ? (
+            recentActivity.map((act, i) => <ListGroup.Item key={i}>{act}</ListGroup.Item>)
+          ) : (
+            <ListGroup.Item>No recent activity.</ListGroup.Item>
+          )}
         </ListGroup>
       </Card>
     </Container>
