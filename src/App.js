@@ -95,7 +95,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/getstarted" element={<GetStarted />} />
             <Route path="/portfolio-builder" element={<PortfolioBuilder />} />
-            <Route path="/post-job" element={<CreateGigWizard />} />
+            <Route path="/post-job" element={<CreateGigWizard />} /> 
             <Route path="/fees" element={<FeesPage />} />
             <Route path="/escrow-check" element={<EscrowCheck />} />
             <Route path="/escrow/:tx_ref" element={<EscrowDetail />} />
