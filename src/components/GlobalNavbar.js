@@ -27,8 +27,13 @@ export default function GlobalNavbar() {
   const notifRef = useRef();
   const navigate = useNavigate();
 
-  // Load avatar
+  // Helper to check if user is logged in
+  const isLoggedIn = () => !!localStorage.getItem('authToken');
+
+  // Load avatar only if logged in
   useEffect(() => {
+    if (!isLoggedIn()) return;
+
     api.get('/api/profile')
       .then(({ data }) => {
         let src = '/default-avatar.png';
@@ -44,8 +49,10 @@ export default function GlobalNavbar() {
       .catch(() => {});
   }, []);
 
-  // Poll unread message count
+  // Poll unread message count (only when logged in)
   useEffect(() => {
+    if (!isLoggedIn()) return;
+
     let cancelled = false;
     const fetchUnread = async () => {
       try {
@@ -62,8 +69,10 @@ export default function GlobalNavbar() {
     return () => { cancelled = true; clearInterval(iv); };
   }, []);
 
-  // Poll in-app notifications
+  // Poll in-app notifications (only when logged in)
   useEffect(() => {
+    if (!isLoggedIn()) return;
+
     let cancelled = false;
     const fetchNotifs = async () => {
       try {
@@ -148,67 +157,69 @@ export default function GlobalNavbar() {
                 </li>
               ))}
 
-              {/* in-app notifications */}
-              <li className="nav-item dropdown px-2" ref={notifRef}>
-                <span
-                  className="nav-link position-relative d-flex align-items-center bell-trigger"
-                  onClick={() => setShowNotif(v => !v)}
-                >
-                  <FaBell className="nav-icon" />
-                  {unreadCount > 0 && (
-                    <Badge bg="danger" pill className="notif-badge">
-                      {unreadCount}
-                    </Badge>
-                  )}
-                </span>
-
-                {showNotif && (
-                  <div className="notif-dropdown shadow-sm">
-                    <h6 className="dropdown-header">Notifications</h6>
-
-                    {unreadCount === 0 ? (
-                      <div className="dropdown-item text-muted">No new notifications</div>
-                    ) : (
-                      unread.map(n => {
-                        let payload;
-                        if (typeof n.data === 'string') {
-                          try { payload = JSON.parse(n.data); }
-                          catch { payload = { text: n.data }; }
-                        } else {
-                          payload = n.data || {};
-                        }
-
-                        return (
-                          <div
-                            key={n.id}
-                            className="dropdown-item notif-item fw-bold"
-                            onClick={async () => {
-                              await api.patch(`/api/notifications/${n.id}/read`);
-                              setNotifs(ns =>
-                                ns.map(x =>
-                                  x.id === n.id ? { ...x, is_read: 1 } : x
-                                )
-                              );
-                              navigate('/notifications');
-                            }}
-                          >
-                            {payload.text}
-                            <br/>
-                            <small className="text-muted">
-                              {new Date(n.created_at).toLocaleString()}
-                            </small>
-                          </div>
-                        );
-                      })
+              {/* in-app notifications (only shown if logged in) */}
+              {isLoggedIn() && (
+                <li className="nav-item dropdown px-2" ref={notifRef}>
+                  <span
+                    className="nav-link position-relative d-flex align-items-center bell-trigger"
+                    onClick={() => setShowNotif(v => !v)}
+                  >
+                    <FaBell className="nav-icon" />
+                    {unreadCount > 0 && (
+                      <Badge bg="danger" pill className="notif-badge">
+                        {unreadCount}
+                      </Badge>
                     )}
+                  </span>
 
-                    <div className="dropdown-divider" />
-                    <NavLink to="/notifications" className="dropdown-item text-center">
-                      See all
-                    </NavLink>
-                  </div>
-                )}
-              </li>
+                  {showNotif && (
+                    <div className="notif-dropdown shadow-sm">
+                      <h6 className="dropdown-header">Notifications</h6>
+
+                      {unreadCount === 0 ? (
+                        <div className="dropdown-item text-muted">No new notifications</div>
+                      ) : (
+                        unread.map(n => {
+                          let payload;
+                          if (typeof n.data === 'string') {
+                            try { payload = JSON.parse(n.data); }
+                            catch { payload = { text: n.data }; }
+                          } else {
+                            payload = n.data || {};
+                          }
+
+                          return (
+                            <div
+                              key={n.id}
+                              className="dropdown-item notif-item fw-bold"
+                              onClick={async () => {
+                                await api.patch(`/api/notifications/${n.id}/read`);
+                                setNotifs(ns =>
+                                  ns.map(x =>
+                                    x.id === n.id ? { ...x, is_read: 1 } : x
+                                  )
+                                );
+                                navigate('/notifications');
+                              }}
+                            >
+                              {payload.text}
+                              <br/>
+                              <small className="text-muted">
+                                {new Date(n.created_at).toLocaleString()}
+                              </small>
+                            </div>
+                          );
+                        })
+                      )}
+
+                      <div className="dropdown-divider" />
+                      <NavLink to="/notifications" className="dropdown-item text-center">
+                        See all
+                      </NavLink>
+                    </div>
+                  )}
+                </li>
+              )}
 
               {/* user avatar/menu */}
               <li className="nav-item dropdown ps-2">
@@ -227,11 +238,16 @@ export default function GlobalNavbar() {
                   />
                 </span>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="meDropdown">
-                  <li><NavLink className="dropdown-item" to="/myprofile">My Profile</NavLink></li>
-                  <li><NavLink className="dropdown-item" to="/fees">Fees & Pricing</NavLink></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><button className="dropdown-item" onClick={() => navigate('/login')}>Sign in</button></li>
-                  <li><button className="dropdown-item" onClick={() => setShowLogoutModal(true)}>Sign Out</button></li>
+                  {isLoggedIn() ? (
+                    <>
+                      <li><NavLink className="dropdown-item" to="/myprofile">My Profile</NavLink></li>
+                      <li><NavLink className="dropdown-item" to="/fees">Fees & Pricing</NavLink></li>
+                      <li><hr className="dropdown-divider" /></li>
+                      <li><button className="dropdown-item" onClick={() => setShowLogoutModal(true)}>Sign Out</button></li>
+                    </>
+                  ) : (
+                    <li><button className="dropdown-item" onClick={() => navigate('/login')}>Sign in</button></li>
+                  )}
                 </ul>
               </li>
             </ul>
