@@ -7,7 +7,7 @@ const api = axios.create({
   timeout: 15_000,
   withCredentials: true,
 });
-
+ 
 // Attach bearer token if present
 api.interceptors.request.use(
   config => {
@@ -49,6 +49,6 @@ api.interceptors.response.use(
     // 3) Other errors: just reject
     return Promise.reject(error);
   }
-);
+);  
 
 export default api;
