@@ -20,6 +20,9 @@ import GlobalNavbar     from '../components/GlobalNavbar';
 import './HomePage.css';
 import background       from '../assets/images/background.jpg';
 
+// Helper to check if a token exists (user is considered logged in)
+const isLoggedIn = () => !!localStorage.getItem('authToken');
+
 export default function HomePage() {
   const navigate = useNavigate();
 
@@ -34,9 +37,14 @@ export default function HomePage() {
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
 
-    api.get('/api/auth/me')
-      .then(({ data }) => setUser(data))
-      .catch(() => setUser(null));
+    // Only fetch auth/me if there is a token; otherwise set user to null immediately
+    if (isLoggedIn()) {
+      api.get('/api/auth/me')
+        .then(({ data }) => setUser(data))
+        .catch(() => setUser(null));
+    } else {
+      setUser(null);
+    }
 
     const hour = new Date().getHours();
     if (hour < 12)      setGreeting({ text: 'Good Morning',   icon: '🌅' });
@@ -46,6 +54,15 @@ export default function HomePage() {
 
   const handleBuildClick = async e => {
     e.preventDefault();
+
+    // 1) Check if there's a token at all
+    if (!isLoggedIn()) {
+      setAuthModalMsg('Please log in as a student to build your portfolio.');
+      setShowVerifyButton(false);
+      return setShowAuthModal(true);
+    }
+
+    // 2) Fetch the user to ensure role is student
     let me;
     try {
       const resp = await api.get('/api/auth/me');
@@ -83,7 +100,14 @@ export default function HomePage() {
   const handlePostClick = async e => {
     e.preventDefault();
 
-    // 1) Ensure logged in as recruiter
+    // 1) Check if there's a token at all
+    if (!isLoggedIn()) {
+      setAuthModalMsg('Please log in as a recruiter to post a gig.');
+      setShowVerifyButton(false);
+      return setShowAuthModal(true);
+    }
+
+    // 2) Ensure logged in as recruiter
     let me;
     try {
       const resp = await api.get('/api/auth/me');
@@ -99,7 +123,7 @@ export default function HomePage() {
       return setShowAuthModal(true);
     }
 
-    // 2) Ensure fully verified
+    // 3) Ensure fully verified
     try {
       const { data } = await api.get('/api/recruiters/verification-status');
       if (data.verification_status !== 'fully_verified') {
@@ -115,7 +139,7 @@ export default function HomePage() {
       return setShowAuthModal(true);
     }
 
-    // 3) Check subscription status & usage
+    // 4) Check subscription status & usage
     try {
       const { data: sub } = await api.get('/api/subscriptions/status');
       if (!sub.plan) {
@@ -261,7 +285,7 @@ export default function HomePage() {
               }}
             >
               Go to Login
-            </Button>
+            </Button> 
           )}
         </Modal.Footer>
       </Modal>
